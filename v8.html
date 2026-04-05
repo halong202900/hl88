@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Game V8 Fullscreen</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* Container chính */
+        #game-wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            cursor: pointer;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Logo chìm ©halong */
+        .watermark {
+            position: absolute;
+            bottom: 15px;
+            right: 30px;
+            color: rgba(255, 255, 255, 0.4);
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            pointer-events: none; 
+            z-index: 9999;
+            text-shadow: 1px 1px 2px #000;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-wrapper" onclick="openFullscreen();">
+    <iframe 
+        id="game-iframe"
+        src="https://v8.kocms397.com/?l=vi&currency=VND" 
+        allow="autoplay; fullscreen; orientation">
+    </iframe>
+
+    <div class="watermark">©halong</div>
+</div>
+
+<script>
+    function openFullscreen() {
+        var elem = document.getElementById("game-wrapper");
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+    }
+</script>
+
+</body>
+</html>
+

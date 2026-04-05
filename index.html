@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>HL88 - Cổng Game Uy Tín ©HALONG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --hl-red: #e62117;
+            --hl-blue: #0088cc;
+            --bg-light: #f5f8fa;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-light);
+            font-family: Arial, sans-serif;
+            padding-bottom: 80px;
+        }
+
+        /* Header & Buttons */
+        .header {
+            background: #fff; padding: 10px 15px;
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid #eee;
+        }
+        .logo-box { display: flex; align-items: center; font-weight: 900; font-size: 26px; text-decoration: none; }
+        .logo-hl { color: var(--hl-red); }
+        .logo-88 { color: var(--hl-blue); border-bottom: 3px solid var(--hl-blue); line-height: 0.8; }
+        
+        .auth-btns { display: flex; gap: 5px; }
+        .btn { padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; text-decoration: none; color: #fff; }
+        .btn-reg { background: var(--hl-red); }
+        .btn-login { background: var(--hl-blue); }
+
+        /* Marquee Nổ Hũ */
+        .marquee-container {
+            background: #222; color: #fff; height: 32px;
+            display: flex; align-items: center; overflow: hidden;
+        }
+        .marquee-text {
+            white-space: nowrap; font-size: 12px;
+            animation: marquee 35s linear infinite;
+        }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        /* Action Bar (Nạp/Rút làm cảnh) */
+        .action-bar {
+            background: #fff; display: flex; justify-content: space-around;
+            padding: 12px 0; border-bottom: 1px solid #f0f0f0; margin-bottom: 10px;
+        }
+        .action-item { text-align: center; color: #555; font-size: 10px; font-weight: bold; }
+        .action-icon { 
+            width: 38px; height: 38px; background: #eef9ff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; margin: 0 auto 5px; color: var(--hl-blue);
+        }
+
+        /* Banner */
+        .banner-gift {
+            width: 92%; margin: 0 auto 15px;
+            background: #fff; border: 1px solid #eee; border-radius: 10px;
+            padding: 15px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .banner-gift b { color: var(--hl-red); font-size: 18px; display: block; }
+
+        /* Game Grid - Đầy đủ 6 game */
+        .game-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 12px; padding: 0 15px;
+        }
+        .game-card {
+            background: #fff; border-radius: 12px; overflow: hidden;
+            border: 1px solid #dae5ed; text-decoration: none;
+            position: relative; box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        }
+        .game-thumb {
+            height: 100px; background: #2c3e50; display: flex;
+            align-items: center; justify-content: center; font-size: 45px;
+        }
+        .game-info { padding: 8px; text-align: center; }
+        .game-info h3 { margin: 0; font-size: 13px; color: #333; }
+        .game-info p { margin: 2px 0; font-size: 10px; color: #999; }
+        .play-btn {
+            display: block; background: var(--hl-blue); color: #fff;
+            padding: 6px; margin-top: 5px; border-radius: 4px;
+            font-size: 11px; font-weight: bold;
+        }
+
+        /* Tag HOT */
+        .tag-hot {
+            position: absolute; top: 6px; left: 6px;
+            background: #ff9800; color: #fff; font-size: 9px;
+            padding: 2px 6px; border-radius: 3px; font-weight: bold; z-index: 5;
+        }
+
+        /* Footer */
+        .footer-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: #fff; height: 60px; display: flex;
+            justify-content: space-around; align-items: center;
+            border-top: 1px solid #eee; z-index: 1000;
+        }
+        .nav-item { text-align: center; color: #bbb; text-decoration: none; font-size: 10px; }
+        .nav-item.active { color: var(--hl-blue); }
+        .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="#" class="logo-box"><span class="logo-hl">HL</span><span class="logo-88">88</span></a>
+        <div class="auth-btns">
+            <a href="#" class="btn btn-reg">ĐĂNG KÝ</a>
+            <a href="#" class="btn btn-login">ĐĂNG NHẬP</a>
+        </div>
+    </div>
+
+    <div class="marquee-container">
+        <div class="marquee-text" id="winner-list"></div>
+    </div>
+
+    <div class="action-bar">
+        <div class="action-item"><div class="action-icon">💰</div>Nạp Tiền</div>
+        <div class="action-item"><div class="action-icon">🏧</div>Rút Tiền</div>
+        <div class="action-item"><div class="action-icon">👥</div>Giới Thiệu</div>
+        <div class="action-item"><div class="action-icon">🤝</div>Đại Lý</div>
+    </div>
+
+    <div class="banner-gift">
+        <div><small style="color:#888">Khuyến mãi tân thủ</small><b>TẶNG 58K TRẢI NGHIỆM</b></div>
+        <div style="font-size: 35px;">🎁</div>
+    </div>
+
+    <div class="game-grid">
+        <div class="game-card">
+            <div class="tag-hot">HOT</div>
+            <div class="game-thumb">🚀</div>
+            <div class="game-info"><h3>Aviator</h3><p>Spribe</p><a href="aviator.html" class="play-btn">CHƠI NGAY</a></div>
+        </div>
+        <div class="game-card">
+            <div class="tag-hot">HOT</div>
+            <div class="game-thumb">🐉</div>
+            <div class="game-info"><h3>Kì Lân</h3><p>PG Soft</p><a href="ki_lan.html" class="play-btn">CHƠI NGAY</a></div>
+        </div>
+        <div class="game-card">
+            <div class="tag-hot">HOT</div>
+            <div class="game-thumb">🧧</div>
+            <div class="game-info"><h3>Lì Xì</h3><p>Tiền Tài</p><a href="li_xi.html" class="play-btn">CHƠI NGAY</a></div>
+        </div>
+        <div class="game-card">
+            <div class="game-thumb">🀄</div>
+            <div class="game-info"><h3>Mạt Chược</h3><p>PG Soft</p><a href="mat_chuoc.html" class="play-btn">CHƠI NGAY</a></div>
+        </div>
+        <div class="game-card">
+            <div class="game-thumb">⚔️</div>
+            <div class="game-info"><h3>Quyết Chiến</h3><p>Tiền Thưởng</p><a href="quyet_chien.html" class="play-btn">CHƠI NGAY</a></div>
+        </div>
+        <div class="game-card">
+            <div class="game-thumb">🃏</div>
+            <div class="game-info"><h3>Club V8</h3><p>Casino</p><a href="v8.html" class="play-btn">CHƠI NGAY</a></div>
+        </div>
+    </div>
+
+    <div class="footer-nav">
+        <a href="#" class="nav-item active"><i class="fas fa-home"></i>Trang chủ</a>
+        <a href="#" class="nav-item"><i class="fas fa-gift"></i>Khuyến mãi</a>
+        <a href="#" class="nav-item"><i class="fas fa-headset"></i>CSKH</a>
+        <a href="#" class="nav-item"><i class="fas fa-user"></i>Tôi</a>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const n = ["an","binh","cuong","duy","em","giang","hoa","kiet","long","minh","nam","oanh","phuc","quan"];
+            const g = ["Aviator","Kì Lân","Lì Xì","Mạt Chược","Quyết Chiến","V8 Casino"];
+            let txt = "🔥 HL88 - CỔNG GAME QUỐC TẾ UY TÍN SỐ 1! | ";
+            for(let i=0; i<40; i++) {
+                let user = n[Math.floor(Math.random()*n.length)].charAt(0) + "****" + String.fromCharCode(97 + Math.floor(Math.random()*26));
+                let win = (Math.random()*45 + 5).toFixed(3) + ",000";
+                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[i%6]}! | `;
+            }
+            document.getElementById('winner-list').innerText = txt;
+        }
+    </script>
+</body>
+</html>
+

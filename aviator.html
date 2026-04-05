@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aviator - ©halong Edition</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #1b1c1d;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .game-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* LỚP DẤU MỜ ©halong */
+        .watermark {
+            position: absolute;
+            bottom: 15px; /* Cách đáy 15px */
+            right: 20px;  /* Cách phải 20px */
+            color: rgba(255, 255, 255, 0.35); /* Màu trắng mờ 35% */
+            font-size: 13px;
+            font-weight: bold;
+            z-index: 9999; /* Luôn nằm trên cùng của Iframe */
+            pointer-events: none; /* Bấm xuyên thấu để không cản trở game */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Đổ bóng để dễ nhìn trên nền tối của Aviator */
+            letter-spacing: 0.5px;
+        }
+
+        #display-balance {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="watermark">©halong</div>
+
+    <div id="display-balance"></div>
+
+    <div class="game-container">
+        <iframe
+            src="https://demo.spribe.io/launch/aviator?currency=VND&amp;lang=VI"
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    <script>
+        const realMoney = 30000;
+        const ratio = 1000;
+        const displayed = (realMoney / ratio).toFixed(2).replace('.', ',');
+        const element = document.getElementById('display-balance');
+        if(element) element.innerText = displayed;
+    </script>
+
+</body>
+</html>
+

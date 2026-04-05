@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Game Fullscreen with Bottom Watermark</title>
+    <style>
+        /* Loại bỏ các khoảng cách mặc định của trình duyệt */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Chống cuộn trang ngoài ý muốn */
+            background-color: #000;
+            display: flex;
+            flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
+        }
+
+        .game-container {
+            flex: 1; /* Chiếm toàn bộ không gian còn lại (khoảng 95% chiều cao) */
+            width: 100vw;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Thanh ngang nhỏ ở dưới cùng để chứa logo */
+        .watermark-bar {
+            height: 30px; /* Chiều cao cố định cho thanh logo */
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Màu nền tối để logo nổi bật */
+            display: flex;
+            align-items: center; /* Căn giữa logo theo chiều dọc */
+            justify-content: flex-end; /* Căn logo sang góc phải */
+            padding-right: 20px; /* Khoảng cách từ logo đến cạnh phải */
+            box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
+        }
+
+        .watermark-text {
+            color: rgba(255, 255, 255, 0.6); /* Màu chữ trắng mờ */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            pointer-events: none; /* Không cản trở tương tác */
+            user-select: none; /* Không cho phép chọn văn bản */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <iframe 
+            src="https://m.eajzzxhro.com/106/index.html?ot=ca7094186b309ee149c55c8822e7ecf2&l=vi&currency=VND&btt=2&or=21novodx%3Dzveuuscmj%3Dxjh&__hv=2fMEQCICuqoNGFMML4fGBdQE%2BkWN6hW4%2FfORGq%2Fnk1ZEMnawwmAiAxGYxJjOCWQZyBSVILpJeMljpfcPHLJNuUZN5itlB12A%3D%3D&__sv=010401YytG6oT6vOl81kKt_NDwR6QjynyruQC7y9kpWiV7QEg" 
+            allow="autoplay; fullscreen; orientation"
+            title="Ways of the Qilin">
+        </iframe>
+    </div>
+
+    <div class="watermark-bar">
+        <span class="watermark-text">©halong</span>
+    </div>
+
+</body>
+</html>
+
