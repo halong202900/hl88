@@ -9,21 +9,25 @@
         :root {
             --hl-red: #e62117;
             --hl-blue: #0088cc;
-            --bg-light: #f5f8fa;
+            /* Nền loang xanh trắng theo yêu cầu */
+            --bg-gradient: linear-gradient(135deg, #ffffff 0%, #e1f5fe 50%, #b3e5fc 100%);
         }
 
         body {
             margin: 0; padding: 0;
-            background-color: var(--bg-light);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
             font-family: Arial, sans-serif;
             padding-bottom: 80px;
+            min-height: 100vh;
         }
 
         /* Header & Buttons */
         .header {
-            background: #fff; padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.9); padding: 10px 15px;
             display: flex; align-items: center; justify-content: space-between;
             border-bottom: 1px solid #eee;
+            backdrop-filter: blur(5px);
         }
         .logo-box { display: flex; align-items: center; font-weight: 900; font-size: 26px; text-decoration: none; }
         .logo-hl { color: var(--hl-red); }
@@ -34,27 +38,28 @@
         .btn-reg { background: var(--hl-red); }
         .btn-login { background: var(--hl-blue); }
 
-        /* Marquee Nổ Hũ */
+        /* Marquee Nổ Hũ - Chỉnh tốc độ chậm lại (60s) */
         .marquee-container {
-            background: #222; color: #fff; height: 32px;
+            background: rgba(34, 34, 34, 0.9); color: #fff; height: 32px;
             display: flex; align-items: center; overflow: hidden;
         }
         .marquee-text {
             white-space: nowrap; font-size: 12px;
-            animation: marquee 35s linear infinite;
+            animation: marquee 60s linear infinite; /* Tốc độ chậm hơn theo yêu cầu */
         }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* Action Bar (Nạp/Rút làm cảnh) */
+        /* Action Bar */
         .action-bar {
-            background: #fff; display: flex; justify-content: space-around;
+            background: rgba(255, 255, 255, 0.7); display: flex; justify-content: space-around;
             padding: 12px 0; border-bottom: 1px solid #f0f0f0; margin-bottom: 10px;
         }
         .action-item { text-align: center; color: #555; font-size: 10px; font-weight: bold; }
         .action-icon { 
-            width: 38px; height: 38px; background: #eef9ff; border-radius: 50%;
+            width: 38px; height: 38px; background: #fff; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             font-size: 18px; margin: 0 auto 5px; color: var(--hl-blue);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         /* Banner */
@@ -62,11 +67,11 @@
             width: 92%; margin: 0 auto 15px;
             background: #fff; border: 1px solid #eee; border-radius: 10px;
             padding: 15px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         .banner-gift b { color: var(--hl-red); font-size: 18px; display: block; }
 
-        /* Game Grid - Đầy đủ 6 game */
+        /* Game Grid */
         .game-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
             gap: 12px; padding: 0 15px;
@@ -74,12 +79,20 @@
         .game-card {
             background: #fff; border-radius: 12px; overflow: hidden;
             border: 1px solid #dae5ed; text-decoration: none;
-            position: relative; box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+            position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
         }
+        
+        /* Chỉnh ảnh nằm trọn vẹn trong khung */
         .game-thumb {
-            height: 100px; background: #2c3e50; display: flex;
-            align-items: center; justify-content: center; font-size: 45px;
+            height: 110px; background: #000; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
         }
+        .game-thumb img {
+            width: 100%; height: 100%;
+            object-fit: contain; /* Ảnh nằm trọn vẹn, không bị cắt */
+            background: #2c3e50;
+        }
+
         .game-info { padding: 8px; text-align: center; }
         .game-info h3 { margin: 0; font-size: 13px; color: #333; }
         .game-info p { margin: 2px 0; font-size: 10px; color: #999; }
@@ -89,7 +102,6 @@
             font-size: 11px; font-weight: bold;
         }
 
-        /* Tag HOT */
         .tag-hot {
             position: absolute; top: 6px; left: 6px;
             background: #ff9800; color: #fff; font-size: 9px;
@@ -137,29 +149,29 @@
     <div class="game-grid">
         <div class="game-card">
             <div class="tag-hot">HOT</div>
-            <div class="game-thumb">🚀</div>
+            <div class="game-thumb"><img src="aviator.png" alt="Aviator"></div>
             <div class="game-info"><h3>Aviator</h3><p>Spribe</p><a href="aviator.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
         <div class="game-card">
             <div class="tag-hot">HOT</div>
-            <div class="game-thumb">🐉</div>
+            <div class="game-thumb"><img src="images.jpeg" alt="Kì Lân"></div>
             <div class="game-info"><h3>Kì Lân</h3><p>PG Soft</p><a href="ki_lan.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
         <div class="game-card">
             <div class="tag-hot">HOT</div>
-            <div class="game-thumb">🧧</div>
+            <div class="game-thumb"><img src="lixj.png" alt="Lì Xì"></div>
             <div class="game-info"><h3>Lì Xì</h3><p>Tiền Tài</p><a href="li_xi.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
         <div class="game-card">
-            <div class="game-thumb">🀄</div>
+            <div class="game-thumb"><img src="matchuoc.png" alt="Mạt Chược"></div>
             <div class="game-info"><h3>Mạt Chược</h3><p>PG Soft</p><a href="mat_chuoc.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
         <div class="game-card">
-            <div class="game-thumb">⚔️</div>
+            <div class="game-thumb"><img src="quyetchien.png" alt="Quyết Chiến"></div>
             <div class="game-info"><h3>Quyết Chiến</h3><p>Tiền Thưởng</p><a href="quyet_chien.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
         <div class="game-card">
-            <div class="game-thumb">🃏</div>
+            <div class="game-thumb"><img src="v8.png" alt="Club V8"></div>
             <div class="game-info"><h3>Club V8</h3><p>Casino</p><a href="v8.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
     </div>
@@ -186,3 +198,4 @@
     </script>
 </body>
 </html>
+
