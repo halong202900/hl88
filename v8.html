@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Game V8 Fullscreen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Game V8 Fullscreen ©HALONG</title>
     <style>
         body, html {
             margin: 0;
@@ -14,12 +14,10 @@
             background-color: #000;
         }
 
-        /* Container chính */
         #game-wrapper {
             position: relative;
             width: 100vw;
             height: 100vh;
-            cursor: pointer;
         }
 
         iframe {
@@ -27,21 +25,26 @@
             height: 100%;
             border: none;
             display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1; /* Lớp thấp hơn logo */
         }
 
-        /* Logo chìm ©halong */
+        /* Logo chìm ©halong - Cải tiến để luôn nổi lên trên */
         .watermark {
-            position: absolute;
-            bottom: 15px;
-            right: 30px;
-            color: rgba(255, 255, 255, 0.4);
-            font-family: Arial, sans-serif;
-            font-size: 14px;
+            position: fixed; /* Dùng fixed để nó không bị trôi khi iframe scroll */
+            bottom: 10px;
+            right: 15px;
+            color: rgba(255, 255, 255, 0.5); /* Tăng độ đậm một chút để dễ thấy trên nền game */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
             font-weight: bold;
-            pointer-events: none; 
-            z-index: 9999;
-            text-shadow: 1px 1px 2px #000;
+            pointer-events: none; /* Không cho phép chạm vào logo để tránh cản trở chơi game */
+            z-index: 999999; /* Số cực lớn để đảm bảo nằm trên cùng */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Đổ bóng để nổi bật trên mọi màu nền của game */
             letter-spacing: 1px;
+            white-space: nowrap; /* Giữ logo nằm trên 1 hàng ngang */
         }
     </style>
 </head>
