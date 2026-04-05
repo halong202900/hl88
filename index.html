@@ -45,7 +45,7 @@
         }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* Action Bar (Nạp/Rút làm cảnh) */
+        /* Action Bar */
         .action-bar {
             background: #fff; display: flex; justify-content: space-around;
             padding: 12px 0; border-bottom: 1px solid #f0f0f0; margin-bottom: 10px;
@@ -66,7 +66,7 @@
         }
         .banner-gift b { color: var(--hl-red); font-size: 18px; display: block; }
 
-        /* Game Grid - Đầy đủ 6 game */
+        /* Game Grid - Tự động điều chỉnh */
         .game-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
             gap: 12px; padding: 0 15px;
@@ -89,14 +89,17 @@
             font-size: 11px; font-weight: bold;
         }
 
-        /* Tag HOT */
         .tag-hot {
             position: absolute; top: 6px; left: 6px;
             background: #ff9800; color: #fff; font-size: 9px;
             padding: 2px 6px; border-radius: 3px; font-weight: bold; z-index: 5;
         }
 
-        /* Footer */
+        /* Footer Copyright */
+        .footer-copyright {
+            text-align: center; padding: 15px; color: #bbb; font-size: 11px;
+        }
+
         .footer-nav {
             position: fixed; bottom: 0; left: 0; right: 0;
             background: #fff; height: 60px; display: flex;
@@ -136,6 +139,11 @@
 
     <div class="game-grid">
         <div class="game-card">
+            <div class="tag-hot">MỚI</div>
+            <div class="game-thumb">🎲</div>
+            <div class="game-info"><h3>Xóc Đĩa 2</h3><p>VND 1:1</p><a href="xoc_dia.html" class="play-btn">CHƠI NGAY</a></div>
+        </div>
+        <div class="game-card">
             <div class="tag-hot">HOT</div>
             <div class="game-thumb">🚀</div>
             <div class="game-info"><h3>Aviator</h3><p>Spribe</p><a href="aviator.html" class="play-btn">CHƠI NGAY</a></div>
@@ -164,6 +172,10 @@
         </div>
     </div>
 
+    <div class="footer-copyright">
+        © 2026 HL88 - ALL RIGHTS RESERVED BY HALONG
+    </div>
+
     <div class="footer-nav">
         <a href="#" class="nav-item active"><i class="fas fa-home"></i>Trang chủ</a>
         <a href="#" class="nav-item"><i class="fas fa-gift"></i>Khuyến mãi</a>
@@ -174,12 +186,12 @@
     <script>
         window.onload = function() {
             const n = ["an","binh","cuong","duy","em","giang","hoa","kiet","long","minh","nam","oanh","phuc","quan"];
-            const g = ["Aviator","Kì Lân","Lì Xì","Mạt Chược","Quyết Chiến","V8 Casino"];
+            const g = ["Xóc Đĩa 2","Aviator","Kì Lân","Lì Xì","Mạt Chược","Quyết Chiến","V8 Casino"];
             let txt = "🔥 HL88 - CỔNG GAME QUỐC TẾ UY TÍN SỐ 1! | ";
             for(let i=0; i<40; i++) {
                 let user = n[Math.floor(Math.random()*n.length)].charAt(0) + "****" + String.fromCharCode(97 + Math.floor(Math.random()*26));
                 let win = (Math.random()*45 + 5).toFixed(3) + ",000";
-                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[i%6]}! | `;
+                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[i%7]}! | `;
             }
             document.getElementById('winner-list').innerText = txt;
         }
