@@ -173,9 +173,10 @@
             <div class="game-info"><h3>Lucky Neko</h3><p>PG Soft</p><a href="lucky_neko.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
         
-        <div class="game-card" style="opacity: 0.6; background: #f9f9f9;">
-            <div class="game-thumb" style="font-size:30px; color:#ccc;">⏳</div>
-            <div class="game-info"><h3>Sắp Ra Mắt</h3><p>HL88</p><a href="#" class="play-btn" style="background:#ccc;">CHỜ ĐỢI</a></div>
+        <div class="game-card">
+            <div class="tag-hot" style="background:#2196f3">NEW</div>
+            <div class="game-thumb"><img src="mh2.png" alt="Mahjong Ways 2"></div>
+            <div class="game-info"><h3>Mạt Chược 2</h3><p>PG Soft</p><a href="mahjong_ways_2.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
     </div>
 
@@ -189,12 +190,12 @@
     <script>
         window.onload = function() {
             const n = ["an","binh","cuong","duy","em","giang","hoa","kiet","long","minh","nam","oanh","phuc","quan"];
-            const g = ["Aviator","Kì Lân","Lì Xì","Mạt Chược","Quyết Chiến","V8 Casino","Lucky Neko"];
+            const g = ["Aviator","Kì Lân","Lì Xì","Mạt Chược","Quyết Chiến","V8 Casino","Lucky Neko","Mạt Chược 2"];
             let txt = "🔥 HL88 - CỔNG GAME QUỐC TẾ UY TÍN SỐ 1! | ";
             for(let i=0; i<40; i++) {
                 let user = n[Math.floor(Math.random()*n.length)].charAt(0) + "****" + String.fromCharCode(97 + Math.floor(Math.random()*26));
                 let win = (Math.random()*45 + 5).toFixed(3) + ",000";
-                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[i%7]}! | `;
+                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[i%8]}! | `;
             }
             document.getElementById('winner-list').innerText = txt;
         }
