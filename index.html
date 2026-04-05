@@ -95,6 +95,9 @@
             font-size: 11px; font-weight: bold;
         }
 
+        .game-card.coming-soon { opacity: 0.6; filter: grayscale(0.8); }
+        .play-btn.disabled { background: #bbb; }
+
         .tag-hot {
             position: absolute; top: 6px; left: 6px;
             background: #ff9800; color: #fff; font-size: 9px;
@@ -166,17 +169,30 @@
             <div class="game-thumb"><img src="v8.png" alt="Club V8"></div>
             <div class="game-info"><h3>Club V8</h3><p>Casino</p><a href="v8.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
-        
         <div class="game-card">
             <div class="tag-hot" style="background:#4caf50">NEW</div>
             <div class="game-thumb"><img src="neko.png" alt="Lucky Neko"></div>
             <div class="game-info"><h3>Lucky Neko</h3><p>PG Soft</p><a href="lucky_neko.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
-        
         <div class="game-card">
             <div class="tag-hot" style="background:#2196f3">NEW</div>
             <div class="game-thumb"><img src="mh2.png" alt="Mahjong Ways 2"></div>
             <div class="game-info"><h3>Mạt Chược 2</h3><p>PG Soft</p><a href="mahjong_ways_2.html" class="play-btn">CHƠI NGAY</a></div>
+        </div>
+
+        <div class="game-card">
+            <div class="tag-hot" style="background:#e62117">NEW</div>
+            <div class="game-thumb"><img src="ball.png" alt="Football X"></div>
+            <div class="game-info">
+                <h3>Football X</h3>
+                <p>SmartSoft</p>
+                <a href="football.html" class="play-btn">CHƠI NGAY</a>
+            </div>
+        </div>
+
+        <div class="game-card coming-soon">
+            <div class="game-thumb"><div style="color:#888; font-size: 11px;">SẮP RA MẮT</div></div>
+            <div class="game-info"><h3>Game Mới</h3><p>Hệ thống</p><a href="#" class="play-btn disabled">CHỜ...</a></div>
         </div>
     </div>
 
@@ -190,12 +206,12 @@
     <script>
         window.onload = function() {
             const n = ["an","binh","cuong","duy","em","giang","hoa","kiet","long","minh","nam","oanh","phuc","quan"];
-            const g = ["Aviator","Kì Lân","Lì Xì","Mạt Chược","Quyết Chiến","V8 Casino","Lucky Neko","Mạt Chược 2"];
+            const g = ["Aviator","Kì Lân","Lì Xì","Mạt Chược","Football X"];
             let txt = "🔥 HL88 - CỔNG GAME QUỐC TẾ UY TÍN SỐ 1! | ";
             for(let i=0; i<40; i++) {
                 let user = n[Math.floor(Math.random()*n.length)].charAt(0) + "****" + String.fromCharCode(97 + Math.floor(Math.random()*26));
                 let win = (Math.random()*45 + 5).toFixed(3) + ",000";
-                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[i%8]}! | `;
+                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[i%g.length]}! | `;
             }
             document.getElementById('winner-list').innerText = txt;
         }
