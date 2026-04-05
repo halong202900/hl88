@@ -9,7 +9,6 @@
         :root {
             --hl-red: #e62117;
             --hl-blue: #0088cc;
-            /* Nền loang xanh trắng theo yêu cầu */
             --bg-gradient: linear-gradient(135deg, #ffffff 0%, #e1f5fe 50%, #b3e5fc 100%);
         }
 
@@ -22,7 +21,6 @@
             min-height: 100vh;
         }
 
-        /* Header & Buttons */
         .header {
             background: rgba(255, 255, 255, 0.9); padding: 10px 15px;
             display: flex; align-items: center; justify-content: space-between;
@@ -38,18 +36,16 @@
         .btn-reg { background: var(--hl-red); }
         .btn-login { background: var(--hl-blue); }
 
-        /* Marquee Nổ Hũ - Chỉnh tốc độ chậm lại (60s) */
         .marquee-container {
             background: rgba(34, 34, 34, 0.9); color: #fff; height: 32px;
             display: flex; align-items: center; overflow: hidden;
         }
         .marquee-text {
             white-space: nowrap; font-size: 12px;
-            animation: marquee 60s linear infinite; /* Tốc độ chậm hơn theo yêu cầu */
+            animation: marquee 60s linear infinite;
         }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* Action Bar */
         .action-bar {
             background: rgba(255, 255, 255, 0.7); display: flex; justify-content: space-around;
             padding: 12px 0; border-bottom: 1px solid #f0f0f0; margin-bottom: 10px;
@@ -62,7 +58,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Banner */
         .banner-gift {
             width: 92%; margin: 0 auto 15px;
             background: #fff; border: 1px solid #eee; border-radius: 10px;
@@ -71,7 +66,6 @@
         }
         .banner-gift b { color: var(--hl-red); font-size: 18px; display: block; }
 
-        /* Game Grid */
         .game-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
             gap: 12px; padding: 0 15px;
@@ -82,14 +76,13 @@
             position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
         }
         
-        /* Chỉnh ảnh nằm trọn vẹn trong khung */
         .game-thumb {
             height: 110px; background: #000; overflow: hidden;
             display: flex; align-items: center; justify-content: center;
         }
         .game-thumb img {
             width: 100%; height: 100%;
-            object-fit: contain; /* Ảnh nằm trọn vẹn, không bị cắt */
+            object-fit: contain;
             background: #2c3e50;
         }
 
@@ -108,7 +101,6 @@
             padding: 2px 6px; border-radius: 3px; font-weight: bold; z-index: 5;
         }
 
-        /* Footer */
         .footer-nav {
             position: fixed; bottom: 0; left: 0; right: 0;
             background: #fff; height: 60px; display: flex;
@@ -174,6 +166,17 @@
             <div class="game-thumb"><img src="v8.png" alt="Club V8"></div>
             <div class="game-info"><h3>Club V8</h3><p>Casino</p><a href="v8.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
+        
+        <div class="game-card">
+            <div class="tag-hot" style="background:#4caf50">NEW</div>
+            <div class="game-thumb"><img src="images.jpeg" alt="Lucky Neko"></div>
+            <div class="game-info"><h3>Lucky Neko</h3><p>PG Soft</p><a href="lucky_neko.html" class="play-btn">CHƠI NGAY</a></div>
+        </div>
+        
+        <div class="game-card" style="opacity: 0.6; background: #f9f9f9;">
+            <div class="game-thumb" style="font-size:30px; color:#ccc;">⏳</div>
+            <div class="game-info"><h3>Sắp Ra Mắt</h3><p>HL88</p><a href="#" class="play-btn" style="background:#ccc;">CHỜ ĐỢI</a></div>
+        </div>
     </div>
 
     <div class="footer-nav">
@@ -186,12 +189,12 @@
     <script>
         window.onload = function() {
             const n = ["an","binh","cuong","duy","em","giang","hoa","kiet","long","minh","nam","oanh","phuc","quan"];
-            const g = ["Aviator","Kì Lân","Lì Xì","Mạt Chược","Quyết Chiến","V8 Casino"];
+            const g = ["Aviator","Kì Lân","Lì Xì","Mạt Chược","Quyết Chiến","V8 Casino","Lucky Neko"];
             let txt = "🔥 HL88 - CỔNG GAME QUỐC TẾ UY TÍN SỐ 1! | ";
             for(let i=0; i<40; i++) {
                 let user = n[Math.floor(Math.random()*n.length)].charAt(0) + "****" + String.fromCharCode(97 + Math.floor(Math.random()*26));
                 let win = (Math.random()*45 + 5).toFixed(3) + ",000";
-                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[i%6]}! | `;
+                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[i%7]}! | `;
             }
             document.getElementById('winner-list').innerText = txt;
         }
