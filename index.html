@@ -17,27 +17,37 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: #fff; /* Nền trắng để nổi bật ảnh load */
+            background: #ffffff; 
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 9999; /* Luôn nằm trên cùng */
-            transition: opacity 0.5s ease, visibility 0.5s;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s;
         }
 
         #loading-screen img {
-            width: 150px; /* Long có thể chỉnh to nhỏ tùy ý */
+            width: 180px; /* Chỉnh to lên một chút cho rõ */
             height: auto;
             animation: pulse 1.5s infinite ease-in-out;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
+        /* Thêm dòng chữ load cho chuyên nghiệp */
+        .loading-text {
+            margin-top: 20px;
+            color: #888;
+            font-size: 14px;
+            letter-spacing: 2px;
+            font-weight: bold;
         }
 
-        /* Tối ưu toàn bộ trang: Chặn highlight xanh và chặn chọn văn bản */
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.7; }
+        }
+
+        /* Chặn các hiệu ứng khó chịu khi chạm */
         * {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
@@ -55,12 +65,9 @@
             user-select: none;
         }
 
-        img {
-            pointer-events: none;
-            -webkit-user-drag: none;
-        }
+        img { pointer-events: none; -webkit-user-drag: none; }
 
-        /* Header */
+        /* Giao diện Header */
         .header {
             background: rgba(255, 255, 255, 0.9); padding: 10px 15px;
             display: flex; align-items: center; justify-content: space-between;
@@ -78,7 +85,7 @@
         .btn-reg { background: var(--hl-red); }
         .btn-login { background: var(--hl-blue); }
 
-        /* Marquee */
+        /* Marquee chạy mượt */
         .marquee-container {
             background: rgba(34, 34, 34, 0.9); color: #fff; height: 32px;
             display: flex; align-items: center; overflow: hidden;
@@ -93,6 +100,7 @@
         }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
+        /* Action Bar */
         .action-bar {
             background: rgba(255, 255, 255, 0.7); display: flex; justify-content: space-around;
             padding: 12px 0; border-bottom: 1px solid #f0f0f0; margin-bottom: 10px;
@@ -115,6 +123,7 @@
         }
         .banner-gift b { color: var(--hl-red); font-size: 18px; display: block; }
 
+        /* Grid Game với hiệu ứng Hover/Active */
         .game-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
             gap: 12px; padding: 0 15px;
@@ -125,12 +134,7 @@
             position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
         }
-        
-        .game-card:hover {
-            transform: scale(1.05);
-            z-index: 10;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        }
+        .game-card:hover { transform: scale(1.05); z-index: 10; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
         .game-card:active { transform: scale(0.95); }
 
         .game-thumb {
@@ -156,6 +160,7 @@
             padding: 2px 6px; border-radius: 3px; font-weight: bold; z-index: 5;
         }
 
+        /* Thanh điều hướng chân trang */
         .footer-nav {
             position: fixed; bottom: 0; left: 0; right: 0;
             background: #fff; height: 60px; display: flex;
@@ -172,6 +177,7 @@
 
     <div id="loading-screen">
         <img src="load.png" alt="Loading...">
+        <div class="loading-text">ĐANG KẾT NỐI...</div>
     </div>
 
     <div class="header">
@@ -183,7 +189,7 @@
     </div>
 
     <div class="marquee-container">
-        <div class="marquee-text" id="winner-list">Hệ thống đang tải dữ liệu...</div>
+        <div class="marquee-text" id="winner-list">Đang kiểm tra danh sách...</div>
     </div>
 
     <div class="action-bar">
@@ -252,14 +258,16 @@
 
     <script>
         window.onload = function() {
-            // Xử lý ẩn màn hình loading
-            const loader = document.getElementById('loading-screen');
-            loader.style.opacity = '0';
+            // Chỉnh thời gian ở đây: 3500ms = 3.5 giây
             setTimeout(() => {
-                loader.style.visibility = 'hidden';
-            }, 500);
+                const loader = document.getElementById('loading-screen');
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.visibility = 'hidden';
+                }, 800); // Đợi hiệu ứng mờ kết thúc rồi ẩn hẳn
+            }, 3500); 
 
-            // Xử lý danh sách người thắng
+            // Script chạy Marquee
             const n = ["an","binh","cuong","duy","em","giang","hoa","kiet","long","minh","nam","oanh","phuc","quan"];
             const g = ["Aviator","Kì Lân","Lì Xì","Mạt Chược","Football X","Club V8"];
             let txt = "🔥 HL88 - CỔNG GAME QUỐC TẾ UY TÍN SỐ 1! | ";
