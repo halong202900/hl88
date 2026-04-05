@@ -39,12 +39,23 @@
         .marquee-container {
             background: rgba(34, 34, 34, 0.9); color: #fff; height: 32px;
             display: flex; align-items: center; overflow: hidden;
+            border-top: 1px solid #444;
         }
+
+        /* PHẦN SỬA LẠI ĐỂ CHẠY NGAY LẬP TỨC */
         .marquee-text {
-            white-space: nowrap; font-size: 12px;
-            animation: marquee 200s linear infinite;
+            white-space: nowrap; 
+            font-size: 12px;
+            display: inline-block;
+            padding-left: 100%; /* Đẩy chữ bắt đầu từ mép phải màn hình */
+            animation: marquee 120s linear infinite; /* 120s là tốc độ vừa phải cho 40 câu */
+            color: #ffeb3b; /* Đổi màu vàng cho nổi bật */
         }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); } /* Bắt đầu chạy ngay từ vị trí padding-left */
+            100% { transform: translateX(-100%); } /* Chạy hết sang trái */
+        }
 
         .action-bar {
             background: rgba(255, 255, 255, 0.7); display: flex; justify-content: space-around;
@@ -126,7 +137,7 @@
     </div>
 
     <div class="marquee-container">
-        <div class="marquee-text" id="winner-list"></div>
+        <div class="marquee-text" id="winner-list">Đang tải danh sách người thắng...</div>
     </div>
 
     <div class="action-bar">
@@ -179,17 +190,11 @@
             <div class="game-thumb"><img src="mh2.png" alt="Mahjong Ways 2"></div>
             <div class="game-info"><h3>Mạt Chược 2</h3><p>PG Soft</p><a href="mahjong_ways_2.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
-
         <div class="game-card">
             <div class="tag-hot" style="background:#e62117">NEW</div>
             <div class="game-thumb"><img src="ball.png" alt="Football X"></div>
-            <div class="game-info">
-                <h3>Football X</h3>
-                <p>SmartSoft</p>
-                <a href="football.html" class="play-btn">CHƠI NGAY</a>
-            </div>
+            <div class="game-info"><h3>Football X</h3><p>SmartSoft</p><a href="football.html" class="play-btn">CHƠI NGAY</a></div>
         </div>
-
         <div class="game-card coming-soon">
             <div class="game-thumb"><div style="color:#888; font-size: 11px;">SẮP RA MẮT</div></div>
             <div class="game-info"><h3>Game Mới</h3><p>Hệ thống</p><a href="#" class="play-btn disabled">CHỜ...</a></div>
@@ -211,7 +216,7 @@
             for(let i=0; i<40; i++) {
                 let user = n[Math.floor(Math.random()*n.length)].charAt(0) + "****" + String.fromCharCode(97 + Math.floor(Math.random()*26));
                 let win = (Math.random()*45 + 5).toFixed(3) + ",000";
-                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[i%g.length]}! | `;
+                txt += `🎉 Chúc mừng ${user} thắng ${win} VND tại ${g[Math.floor(Math.random()*g.length)]}! | `;
             }
             document.getElementById('winner-list').innerText = txt;
         }
