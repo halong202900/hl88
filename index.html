@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>HL88 - Cổng Game Uy Tín ©HALONG</title>
+    <title>HL88 - Cổng Game Uy Tín</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         :root {
             --hl-red: #e62117;
             --hl-blue: #0088cc;
             --bg-gradient: linear-gradient(135deg, #ffffff 0%, #e1f5fe 50%, #b3e5fc 100%);
+        }
+
+        /* Tối ưu toàn bộ trang: Chặn highlight xanh và chặn chọn văn bản */
+        * {
+            -webkit-tap-highlight-color: transparent; /* Chặn miếng màu xanh khi bấm */
+            -webkit-touch-callout: none; /* Chặn menu ngữ cảnh trên iOS */
+            outline: none;
         }
 
         body {
@@ -19,6 +26,14 @@
             font-family: Arial, sans-serif;
             padding-bottom: 80px;
             min-height: 100vh;
+            -webkit-user-select: none; /* Chặn copy/paste/nhấn giữ */
+            user-select: none;
+        }
+
+        /* Chặn lưu ảnh */
+        img {
+            pointer-events: none;
+            -webkit-user-drag: none;
         }
 
         /* Header */
@@ -39,7 +54,7 @@
         .btn-reg { background: var(--hl-red); }
         .btn-login { background: var(--hl-blue); }
 
-        /* Marquee */
+        /* Marquee chạy ngay lập tức */
         .marquee-container {
             background: rgba(34, 34, 34, 0.9); color: #fff; height: 32px;
             display: flex; align-items: center; overflow: hidden;
@@ -78,7 +93,7 @@
         }
         .banner-gift b { color: var(--hl-red); font-size: 18px; display: block; }
 
-        /* Game Grid & Animation */
+        /* Game Grid & Animations */
         .game-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
             gap: 12px; padding: 0 15px;
@@ -90,13 +105,11 @@
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
         }
         
-        /* Hiệu ứng di chuột cho PC */
         .game-card:hover {
             transform: scale(1.05);
             z-index: 10;
             box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
-        /* Hiệu ứng nhấn cho Điện thoại */
         .game-card:active { transform: scale(0.95); }
 
         .game-thumb {
@@ -135,9 +148,7 @@
         .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
     </style>
 </head>
-<body>
-
-    <div class="header">
+<body oncontextmenu="return false;"> <div class="header">
         <a href="#" class="logo-box"><span class="logo-hl">HL</span><span class="logo-88">88</span></a>
         <div class="auth-btns">
             <a href="#" class="btn btn-reg">ĐĂNG KÝ</a>
