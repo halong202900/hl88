@@ -27,12 +27,11 @@
         }
 
         #loading-screen img {
-            width: 180px; /* Chỉnh to lên một chút cho rõ */
+            width: 180px;
             height: auto;
             animation: pulse 1.5s infinite ease-in-out;
         }
 
-        /* Thêm dòng chữ load cho chuyên nghiệp */
         .loading-text {
             margin-top: 20px;
             color: #888;
@@ -47,7 +46,6 @@
             100% { transform: scale(0.95); opacity: 0.7; }
         }
 
-        /* Chặn các hiệu ứng khó chịu khi chạm */
         * {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
@@ -65,9 +63,15 @@
             user-select: none;
         }
 
-        img { pointer-events: none; -webkit-user-drag: none; }
+        /* Sửa lỗi ảnh: Đảm bảo ảnh hiện đúng kích thước */
+        .game-thumb img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* Đổi thành cover để ảnh lấp đầy khung */
+            background: #2c3e50; 
+            display: block;
+        }
 
-        /* Giao diện Header */
         .header {
             background: rgba(255, 255, 255, 0.9); padding: 10px 15px;
             display: flex; align-items: center; justify-content: space-between;
@@ -85,7 +89,6 @@
         .btn-reg { background: var(--hl-red); }
         .btn-login { background: var(--hl-blue); }
 
-        /* Marquee chạy mượt */
         .marquee-container {
             background: rgba(34, 34, 34, 0.9); color: #fff; height: 32px;
             display: flex; align-items: center; overflow: hidden;
@@ -100,7 +103,6 @@
         }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* Action Bar */
         .action-bar {
             background: rgba(255, 255, 255, 0.7); display: flex; justify-content: space-around;
             padding: 12px 0; border-bottom: 1px solid #f0f0f0; margin-bottom: 10px;
@@ -113,7 +115,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: 0.3s;
         }
-        .action-item:active .action-icon { transform: translateY(-5px); background: var(--hl-blue); color: #fff; }
 
         .banner-gift {
             width: 92%; margin: 0 auto 15px;
@@ -123,7 +124,6 @@
         }
         .banner-gift b { color: var(--hl-red); font-size: 18px; display: block; }
 
-        /* Grid Game với hiệu ứng Hover/Active */
         .game-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
             gap: 12px; padding: 0 15px;
@@ -132,16 +132,9 @@
             background: #fff; border-radius: 12px; overflow: hidden;
             border: 1px solid #dae5ed; text-decoration: none;
             position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+            transition: 0.3s;
         }
-        .game-card:hover { transform: scale(1.05); z-index: 10; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-        .game-card:active { transform: scale(0.95); }
-
-        .game-thumb {
-            height: 110px; background: #000; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .game-thumb img { width: 100%; height: 100%; object-fit: contain; background: #2c3e50; }
+        .game-thumb { height: 110px; background: #2c3e50; overflow: hidden; }
 
         .game-info { padding: 8px; text-align: center; }
         .game-info h3 { margin: 0; font-size: 13px; color: #333; }
@@ -150,9 +143,8 @@
         .play-btn {
             display: block; background: var(--hl-blue); color: #fff;
             padding: 6px; margin-top: 5px; border-radius: 4px;
-            font-size: 11px; font-weight: bold; transition: 0.3s;
+            font-size: 11px; font-weight: bold;
         }
-        .game-card:hover .play-btn { background: #ffa000; }
 
         .tag-hot {
             position: absolute; top: 6px; left: 6px;
@@ -160,19 +152,6 @@
             padding: 2px 6px; border-radius: 3px; font-weight: bold; z-index: 5;
         }
 
-        /* Thanh điều hướng chân trang */
-        .footer-nav {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: #fff; height: 60px; display: flex;
-            justify-content: space-around; align-items: center;
-            border-top: 1px solid #eee; z-index: 1000;
-        }
-        .nav-item { text-align: center; color: #bbb; text-decoration: none; font-size: 10px; transition: 0.2s; }
-        .nav-item.active { color: var(--hl-blue); }
-        .nav-item:active { transform: translateY(-3px); }
-        .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
-
-        /* Tuyên bố bản quyền và trách nhiệm */
         .disclaimer-footer {
             padding: 25px 15px 100px;
             text-align: center;
@@ -180,15 +159,20 @@
             font-size: 11px;
             line-height: 1.6;
         }
-        .partner-logos {
-            margin-bottom: 15px;
-            font-weight: bold;
-            color: #555;
-            font-size: 13px;
+        .partner-logos { margin-bottom: 15px; font-weight: bold; color: #555; font-size: 13px; }
+
+        .footer-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: #fff; height: 60px; display: flex;
+            justify-content: space-around; align-items: center;
+            border-top: 1px solid #eee; z-index: 1000;
         }
+        .nav-item { text-align: center; color: #bbb; text-decoration: none; font-size: 10px; }
+        .nav-item.active { color: var(--hl-blue); }
+        .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
     <div id="loading-screen">
         <img src="load.png" alt="Loading...">
@@ -265,12 +249,10 @@
     </div>
 
     <div class="disclaimer-footer">
-        <div class="partner-logos">
-            © PG Soft | © Spribe | © SmartSoft
-        </div>
+        <div class="partner-logos">© PG Soft | © Spribe | © SmartSoft</div>
         <p><b>TUYÊN BỐ MIỄN TRỪ TRÁCH NHIỆM:</b><br>
-        Dự án <b>HL88-SEU</b> được phát triển bởi <b>©halong</b> chỉ nhằm mục đích thực hành lập trình và giải trí nội bộ. Tất cả trò chơi trên trang web đều là bản trải nghiệm (Demo). Tiền trong game là tiền ảo (DMO), không có giá trị thật và không thể quy đổi dưới bất kỳ hình thức nào.</p>
-        <p>© 2026 HL88 Team Sếu. All Rights Reserved.</p>
+        Dự án <b>HL88</b> được phát triển bởi <b>©halong</b> chỉ nhằm mục đích thực hành lập trình và giải trí nội bộ. Tất cả trò chơi trên trang web đều là bản trải nghiệm (Demo). Tiền trong game là tiền ảo (DMO), không có giá trị thật và không thể quy đổi dưới bất kỳ hình thức nào.</p>
+        <p>© 2026 HL88. All Rights Reserved.</p>
     </div>
 
     <div class="footer-nav">
@@ -282,16 +264,12 @@
 
     <script>
         window.onload = function() {
-            // Chỉnh thời gian ở đây: 3500ms = 3.5 giây
             setTimeout(() => {
                 const loader = document.getElementById('loading-screen');
                 loader.style.opacity = '0';
-                setTimeout(() => {
-                    loader.style.visibility = 'hidden';
-                }, 800); // Đợi hiệu ứng mờ kết thúc rồi ẩn hẳn
+                setTimeout(() => { loader.style.visibility = 'hidden'; }, 800);
             }, 3500); 
 
-            // Script chạy Marquee
             const n = ["an","binh","cuong","duy","em","giang","hoa","kiet","long","minh","nam","oanh","phuc","quan"];
             const g = ["Aviator","Kì Lân","Lì Xì","Mạt Chược","Football X","Club V8"];
             let txt = "🔥 HL88 - CỔNG GAME QUỐC TẾ UY TÍN SỐ 1! | ";
