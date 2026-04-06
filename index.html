@@ -48,7 +48,10 @@
 
         * {
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
+            /* CHẶN ẤN GIỮ HIỆN MENU */
+            -webkit-touch-callout: none !important; 
+            -webkit-user-select: none;
+            user-select: none;
             outline: none;
         }
 
@@ -59,17 +62,15 @@
             font-family: Arial, sans-serif;
             padding-bottom: 80px;
             min-height: 100vh;
-            -webkit-user-select: none;
-            user-select: none;
         }
 
-        /* Sửa lỗi ảnh: Đảm bảo ảnh hiện đúng kích thước */
         .game-thumb img { 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; /* Đổi thành cover để ảnh lấp đầy khung */
+            object-fit: cover;
             background: #2c3e50; 
             display: block;
+            pointer-events: none; /* Ngăn tương tác trực tiếp vào ảnh để tránh bị lưu ảnh */
         }
 
         .header {
@@ -107,7 +108,8 @@
             background: rgba(255, 255, 255, 0.7); display: flex; justify-content: space-around;
             padding: 12px 0; border-bottom: 1px solid #f0f0f0; margin-bottom: 10px;
         }
-        .action-item { text-align: center; color: #555; font-size: 10px; font-weight: bold; cursor: pointer; }
+        .action-item { text-align: center; color: #555; font-size: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .action-item:active { transform: scale(0.9); }
         .action-icon { 
             width: 38px; height: 38px; background: #fff; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
@@ -128,14 +130,24 @@
             display: grid; grid-template-columns: repeat(2, 1fr);
             gap: 12px; padding: 0 15px;
         }
+
+        /* HIỆU ỨNG NỔI KHI DI CHUỘT/BẤM */
         .game-card {
             background: #fff; border-radius: 12px; overflow: hidden;
             border: 1px solid #dae5ed; text-decoration: none;
             position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            transition: 0.3s;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        .game-thumb { height: 110px; background: #2c3e50; overflow: hidden; }
+        .game-card:hover, .game-card:active {
+            transform: translateY(-5px); /* Nổi lên trên */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15); /* Đổ bóng đậm hơn */
+            border-color: var(--hl-blue);
+        }
+        .game-card:active {
+            transform: scale(0.98) translateY(-2px); /* Nhấn xuống một chút khi click */
+        }
 
+        .game-thumb { height: 110px; background: #2c3e50; overflow: hidden; }
         .game-info { padding: 8px; text-align: center; }
         .game-info h3 { margin: 0; font-size: 13px; color: #333; }
         .game-info p { margin: 2px 0; font-size: 10px; color: #999; }
@@ -144,6 +156,10 @@
             display: block; background: var(--hl-blue); color: #fff;
             padding: 6px; margin-top: 5px; border-radius: 4px;
             font-size: 11px; font-weight: bold;
+            transition: 0.2s;
+        }
+        .game-card:active .play-btn {
+            background: var(--hl-red); /* Đổi màu nút khi bấm cho sinh động */
         }
 
         .tag-hot {
@@ -167,14 +183,13 @@
             justify-content: space-around; align-items: center;
             border-top: 1px solid #eee; z-index: 1000;
         }
-        .nav-item { text-align: center; color: #bbb; text-decoration: none; font-size: 10px; }
+        .nav-item { text-align: center; color: #bbb; text-decoration: none; font-size: 10px; transition: 0.2s; }
+        .nav-item:active { transform: scale(0.85); }
         .nav-item.active { color: var(--hl-blue); }
         .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
     </style>
 </head>
-<body>
-
-    <div id="loading-screen">
+<body oncontextmenu="return false;"> <div id="loading-screen">
         <img src="load.png" alt="Loading...">
         <div class="loading-text">ĐANG KẾT NỐI...</div>
     </div>
@@ -280,6 +295,13 @@
             }
             document.getElementById('winner-list').innerText = txt;
         }
+
+        // Chặn phím tắt F12, Ctrl+U để bảo vệ code sơ bộ
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || (e.ctrlKey && (e.keyCode == 85 || e.keyCode == 73))) {
+                return false;
+            }
+        };
     </script>
  
     <script defer src="/_vercel/insights/script.js"></script>
