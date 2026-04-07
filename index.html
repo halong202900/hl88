@@ -48,7 +48,6 @@
 
         * {
             -webkit-tap-highlight-color: transparent;
-            /* CHẶN ẤN GIỮ HIỆN MENU */
             -webkit-touch-callout: none !important; 
             -webkit-user-select: none;
             user-select: none;
@@ -70,7 +69,7 @@
             object-fit: cover;
             background: #2c3e50; 
             display: block;
-            pointer-events: none; /* Ngăn tương tác trực tiếp vào ảnh để tránh bị lưu ảnh */
+            pointer-events: none;
         }
 
         .header {
@@ -126,27 +125,58 @@
         }
         .banner-gift b { color: var(--hl-red); font-size: 18px; display: block; }
 
+        /* THANH LỌC GAME (CATEGORY) */
+        .category-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 5px 15px 15px;
+            scrollbar-width: none;
+        }
+        .category-nav::-webkit-scrollbar { display: none; }
+
+        .cat-item {
+            min-width: 80px;
+            background: #fff;
+            padding: 10px 5px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            transition: 0.3s;
+        }
+        .cat-item i { font-size: 20px; display: block; margin-bottom: 5px; color: #555; }
+        .cat-item span { font-size: 10px; font-weight: bold; color: #777; text-transform: uppercase; }
+
+        /* Khi được chọn */
+        .cat-item.active {
+            background: #e1f5fe;
+            border-color: var(--hl-blue);
+        }
+        .cat-item.active i, .cat-item.active span {
+            color: var(--hl-blue);
+        }
+
         .game-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
             gap: 12px; padding: 0 15px;
         }
 
-        /* HIỆU ỨNG NỔI KHI DI CHUỘT/BẤM */
         .game-card {
             background: #fff; border-radius: 12px; overflow: hidden;
             border: 1px solid #dae5ed; text-decoration: none;
             position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: block; /* Mặc định hiển thị */
         }
+        /* Class để ẩn game khi lọc */
+        .game-card.hidden { display: none; }
+
         .game-card:hover, .game-card:active {
-            transform: translateY(-5px); /* Nổi lên trên */
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15); /* Đổ bóng đậm hơn */
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
             border-color: var(--hl-blue);
         }
-        .game-card:active {
-            transform: scale(0.98) translateY(-2px); /* Nhấn xuống một chút khi click */
-        }
-
         .game-thumb { height: 110px; background: #2c3e50; overflow: hidden; }
         .game-info { padding: 8px; text-align: center; }
         .game-info h3 { margin: 0; font-size: 13px; color: #333; }
@@ -158,9 +188,6 @@
             font-size: 11px; font-weight: bold;
             transition: 0.2s;
         }
-        .game-card:active .play-btn {
-            background: var(--hl-red); /* Đổi màu nút khi bấm cho sinh động */
-        }
 
         .tag-hot {
             position: absolute; top: 6px; left: 6px;
@@ -171,9 +198,7 @@
         .disclaimer-footer {
             padding: 25px 15px 100px;
             text-align: center;
-            color: #777;
-            font-size: 11px;
-            line-height: 1.6;
+            color: #777; font-size: 11px; line-height: 1.6;
         }
         .partner-logos { margin-bottom: 15px; font-weight: bold; color: #555; font-size: 13px; }
 
@@ -183,13 +208,14 @@
             justify-content: space-around; align-items: center;
             border-top: 1px solid #eee; z-index: 1000;
         }
-        .nav-item { text-align: center; color: #bbb; text-decoration: none; font-size: 10px; transition: 0.2s; }
-        .nav-item:active { transform: scale(0.85); }
+        .nav-item { text-align: center; color: #bbb; text-decoration: none; font-size: 10px; }
         .nav-item.active { color: var(--hl-blue); }
         .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
     </style>
 </head>
-<body oncontextmenu="return false;"> <div id="loading-screen">
+<body oncontextmenu="return false;"> 
+    
+    <div id="loading-screen">
         <img src="load.png" alt="Loading...">
         <div class="loading-text">ĐANG KẾT NỐI...</div>
     </div>
@@ -218,60 +244,77 @@
         <div style="font-size: 35px;">🎁</div>
     </div>
 
-    <div class="game-grid">
-        <a href="aviamaster.html" class="game-card">
+    <div class="category-nav">
+        <div class="cat-item active" onclick="filterGames('all', this)">
+            <i class="fas fa-th-large"></i>
+            <span>Tất cả</span>
+        </div>
+        <div class="cat-item" onclick="filterGames('slot', this)">
+            <i class="fas fa-revolving-dot">🎰</i>
+            <span>Nổ hũ</span>
+        </div>
+        <div class="cat-item" onclick="filterGames('casino', this)">
+            <i class="fas fa-spade">🃏</i>
+            <span>Casino</span>
+        </div>
+    </div>
+
+    <div class="game-grid" id="main-grid">
+        <a href="aviamaster.html" class="game-card" data-type="casino">
             <div class="tag-hot" style="background:#e62117">NEW</div>
             <div class="game-thumb"><img src="avia.png" alt="Avia Masters"></div>
             <div class="game-info"><h3>Avia Masters</h3><p>BGaming</p><div class="play-btn">CHƠI NGAY</div></div>
         </a>
-        <a href="aviator.html" class="game-card">
+        <a href="aviator.html" class="game-card" data-type="casino">
             <div class="tag-hot">HOT</div>
             <div class="game-thumb"><img src="aviator.png" alt="Aviator"></div>
             <div class="game-info"><h3>Aviator</h3><p>Spribe</p><div class="play-btn">CHƠI NGAY</div></div>
         </a>
-        <a href="ki_lan.html" class="game-card">
+
+        <a href="ki_lan.html" class="game-card" data-type="slot">
             <div class="tag-hot">HOT</div>
             <div class="game-thumb"><img src="images.jpeg" alt="Kì Lân"></div>
             <div class="game-info"><h3>Kì Lân</h3><p>PG Soft</p><div class="play-btn">CHƠI NGAY</div></div>
         </a>
-        <a href="li_xi.html" class="game-card">
+        <a href="li_xi.html" class="game-card" data-type="slot">
             <div class="tag-hot">HOT</div>
             <div class="game-thumb"><img src="lixj.png" alt="Lì Xì"></div>
             <div class="game-info"><h3>Lì Xì</h3><p>Tiền Tài</p><div class="play-btn">CHƠI NGAY</div></div>
         </a>
-        <a href="mat_chuoc.html" class="game-card">
-            <div class="game-thumb"><img src="matchuoc.png" alt="Mạt Chược"></div>
-            <div class="game-info"><h3>Mạt Chược</h3><p>PG Soft</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-        <a href="quyet_chien.html" class="game-card">
+        <a href="quyet_chien.html" class="game-card" data-type="slot">
             <div class="game-thumb"><img src="quyetchien.png" alt="Quyết Chiến"></div>
             <div class="game-info"><h3>Quyết Chiến</h3><p>Tiền Thưởng</p><div class="play-btn">CHƠI NGAY</div></div>
         </a>
-        <a href="v8.html" class="game-card">
-            <div class="game-thumb"><img src="v8.png" alt="Club V8"></div>
-            <div class="game-info"><h3>Club V8</h3><p>Casino</p><div class="play-btn">CHƠI NGAY</div></div>
+        <a href="mat_chuoc.html" class="game-card" data-type="slot">
+            <div class="game-thumb"><img src="matchuoc.png" alt="Mạt Chược"></div>
+            <div class="game-info"><h3>Mạt Chược</h3><p>PG Soft</p><div class="play-btn">CHƠI NGAY</div></div>
         </a>
-        <a href="lucky_neko.html" class="game-card">
+        <a href="lucky_neko.html" class="game-card" data-type="slot">
             <div class="tag-hot" style="background:#4caf50">NEW</div>
             <div class="game-thumb"><img src="neko.png" alt="Lucky Neko"></div>
             <div class="game-info"><h3>Lucky Neko</h3><p>PG Soft</p><div class="play-btn">CHƠI NGAY</div></div>
         </a>
-        <a href="mahjong_ways_2.html" class="game-card">
+        <a href="mahjong_ways_2.html" class="game-card" data-type="slot">
             <div class="tag-hot" style="background:#2196f3">NEW</div>
             <div class="game-thumb"><img src="mh2.png" alt="Mahjong Ways 2"></div>
             <div class="game-info"><h3>Mạt Chược 2</h3><p>PG Soft</p><div class="play-btn">CHƠI NGAY</div></div>
         </a>
-        <a href="football.html" class="game-card">
+
+        <a href="v8.html" class="game-card" data-type="casino">
+            <div class="game-thumb"><img src="v8.png" alt="Club V8"></div>
+            <div class="game-info"><h3>Club V8</h3><p>Casino</p><div class="play-btn">CHƠI NGAY</div></div>
+        </a>
+        <a href="football.html" class="game-card" data-type="casino">
             <div class="tag-hot" style="background:#e62117">NEW</div>
             <div class="game-thumb"><img src="ball.png" alt="Football X"></div>
             <div class="game-info"><h3>Football X</h3><p>SmartSoft</p><div class="play-btn">CHƠI NGAY</div></div>
         </a>
-        <a href="chickenroad.html" class="game-card">
+        <a href="chickenroad.html" class="game-card" data-type="casino">
             <div class="tag-hot" style="background:#ff9800">NEW</div>
             <div class="game-thumb"><img src="chickenroad.png" alt="Chicken Road"></div>
             <div class="game-info"><h3>Chicken Road</h3><p>InOut</p><div class="play-btn">CHƠI NGAY</div></div>
         </a>
-        <a href="aviafly2.html" class="game-card">
+        <a href="aviafly2.html" class="game-card" data-type="casino">
             <div class="tag-hot" style="background:#ff9800">HOT</div>
             <div class="game-thumb"><img src="aviafly2.png" alt="Avia Fly 2"></div>
             <div class="game-info"><h3>Avia Fly 2</h3><p>InOut</p><div class="play-btn">CHƠI NGAY</div></div>
@@ -293,6 +336,28 @@
     </div>
 
     <script>
+        // Hàm lọc game
+        function filterGames(type, element) {
+            // Đổi màu nút được chọn
+            const items = document.querySelectorAll('.cat-item');
+            items.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+
+            // Lọc các thẻ game
+            const cards = document.querySelectorAll('.game-card');
+            cards.forEach(card => {
+                if (type === 'all') {
+                    card.classList.remove('hidden');
+                } else {
+                    if (card.getAttribute('data-type') === type) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
         window.onload = function() {
             setTimeout(() => {
                 const loader = document.getElementById('loading-screen');
@@ -311,7 +376,6 @@
             document.getElementById('winner-list').innerText = txt;
         }
 
-        // Chặn phím tắt F12, Ctrl+U để bảo vệ code sơ bộ
         document.onkeydown = function(e) {
             if (e.keyCode == 123 || (e.ctrlKey && (e.keyCode == 85 || e.keyCode == 73))) {
                 return false;
