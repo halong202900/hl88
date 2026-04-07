@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Avia Masters - HL88</title>
+    <style>
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            background-color: #000; 
+        }
+        .game-wrapper { 
+            position: relative; 
+            width: 100vw; 
+            height: 100vh; 
+        }
+        iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            display: block; 
+        }
+
+        /* Dòng bản quyền xám mờ ở góc dưới bên phải */
+        .copyright-tag {
+            position: absolute;
+            bottom: 12px; /* Cách đáy 12px */
+            right: 15px;  /* Cách phải 15px */
+            color: rgba(255, 255, 255, 0.3); /* Màu trắng nhưng mờ đi 70% thành màu xám */
+            font-size: 11px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            z-index: 100;
+            pointer-events: none; /* Quan trọng: để không bấm nhầm vào chữ khi chơi game */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Đổ bóng nhẹ để vẫn đọc được trên nền sáng */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <div class="copyright-tag">©halong</div>
+        
+        <iframe 
+            src="https://slotslaunch.com/game/29406?language=vi&currency=VND" 
+            allow="autoplay; fullscreen"
+            allowfullscreen>
+        </iframe>
+    </div>
+
+</body>
+</html>
+
