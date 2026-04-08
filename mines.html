@@ -8,7 +8,8 @@
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            overflow: hidden; background-color: #000;
+            overflow: hidden; 
+            background-color: #000;
             font-family: sans-serif;
         }
 
@@ -17,7 +18,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: #ffffff; /* Nền trắng cho sạch sẽ */
+            background: #ffffff; 
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -45,10 +46,16 @@
             100% { transform: scale(0.95); opacity: 0.8; }
         }
 
-        /* Container game */
+        /* Dùng fixed để khóa chặt khung game vào màn hình, chống tràn */
         #game-wrapper {
-            width: 100vw;
-            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
 
         iframe {
@@ -88,13 +95,12 @@
 
     <script>
         window.onload = function() {
-            // Đợi đúng 5 giây (5000ms) rồi mới ẩn màn hình load
             setTimeout(function() {
                 const loader = document.getElementById('loading-screen');
                 loader.style.opacity = '0';
                 setTimeout(function() {
                     loader.style.display = 'none';
-                }, 800); // Đợi hiệu ứng mờ dần xong mới xóa hẳn
+                }, 800);
             }, 5000);
         };
     </script>
