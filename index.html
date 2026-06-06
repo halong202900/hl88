@@ -1,391 +1,917 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>HL88</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        :root {
-            --hl-red: #e62117;
-            --hl-blue: #0088cc;
-            --bg-gradient: linear-gradient(135deg, #ffffff 0%, #e1f5fe 50%, #b3e5fc 100%);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>HL88 – Cổng Game Quốc Tế</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Mulish:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --gold: #c9a84c;
+  --gold-light: #f0d080;
+  --gold-dim: rgba(201,168,76,0.15);
+  --red: #c0392b;
+  --red-bright: #e74c3c;
+  --bg: #080c10;
+  --bg2: #0d1117;
+  --bg3: #111820;
+  --cream: #f0e6cc;
+  --text-dim: rgba(240,230,204,0.45);
+  --border: rgba(201,168,76,0.2);
+}
 
-        /* Hiệu ứng Loading Screen */
-        #loading-screen {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #ffffff; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s;
-        }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; }
 
-        #loading-screen img {
-            width: 180px;
-            height: auto;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
+body {
+  background: var(--bg);
+  font-family: 'Mulish', sans-serif;
+  color: var(--cream);
+  min-height: 100vh;
+  padding-bottom: 72px;
+  overflow-x: hidden;
+  cursor: default;
+}
 
-        .loading-text {
-            margin-top: 20px;
-            color: #888;
-            font-size: 14px;
-            letter-spacing: 2px;
-            font-weight: bold;
-        }
+/* ── PARTICLE CANVAS ── */
+#particleCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
 
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.7; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.7; }
-        }
+/* ── LOADING ── */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.9s ease, visibility 0.9s;
+}
+#loading-screen img { width: 140px; animation: loadPulse 1.6s ease-in-out infinite; }
+@keyframes loadPulse {
+  0%,100% { transform: scale(0.93); filter: brightness(0.8); }
+  50% { transform: scale(1.06); filter: brightness(1.2) drop-shadow(0 0 18px #c9a84c); }
+}
+.load-bar-wrap {
+  width: 180px; height: 3px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  margin-top: 28px;
+  overflow: hidden;
+}
+.load-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 99px;
+  animation: loadBar 3.2s ease-in-out forwards;
+}
+@keyframes loadBar { from { width:0 } to { width:100% } }
+.load-txt {
+  margin-top: 14px;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
 
-        * {
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none !important; 
-            -webkit-user-select: none;
-            user-select: none;
-            outline: none;
-        }
+/* ── CANVAS DECO (top ornament) ── */
+#decoCanvas {
+  display: block;
+  width: 100%;
+  height: 60px;
+  position: relative;
+  z-index: 1;
+}
 
-        body {
-            margin: 0; padding: 0;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            font-family: Arial, sans-serif;
-            padding-bottom: 80px;
-            min-height: 100vh;
-        }
+/* ── HEADER ── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,12,16,0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-decoration: none;
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+}
+.logo-hl { color: var(--red-bright); }
+.logo-88 {
+  color: var(--gold);
+  text-shadow: 0 0 12px rgba(201,168,76,0.6);
+}
+.auth-btns { display: flex; gap: 7px; }
+.btn {
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Mulish', sans-serif;
+}
+.btn:active { transform: scale(0.93); }
+.btn-reg {
+  background: linear-gradient(135deg, var(--red), var(--red-bright));
+  box-shadow: 0 3px 10px rgba(192,57,43,0.35);
+}
+.btn-login {
+  background: linear-gradient(135deg, #b8860b, var(--gold));
+  color: #0a0a0a;
+  box-shadow: 0 3px 10px rgba(201,168,76,0.3);
+}
 
-        .game-thumb img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover;
-            background: #2c3e50; 
-            display: block;
-            pointer-events: none;
-        }
+/* ── MARQUEE ── */
+.marquee-wrap {
+  background: linear-gradient(90deg, rgba(192,57,43,0.15), rgba(201,168,76,0.08), rgba(192,57,43,0.15));
+  border-bottom: 1px solid var(--border);
+  height: 30px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+.marquee-wrap::before, .marquee-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 40px;
+  z-index: 2;
+}
+.marquee-wrap::before { left:0; background: linear-gradient(90deg, var(--bg), transparent); }
+.marquee-wrap::after  { right:0; background: linear-gradient(-90deg, var(--bg), transparent); }
+.marquee-inner {
+  white-space: nowrap;
+  font-size: 11.5px;
+  color: var(--gold-light);
+  padding-left: 100%;
+  animation: marquee 80s linear infinite;
+  font-weight: 600;
+}
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
 
-        .header {
-            background: rgba(255, 255, 255, 0.9); padding: 10px 15px;
-            display: flex; align-items: center; justify-content: space-between;
-            border-bottom: 1px solid #eee;
-            backdrop-filter: blur(5px);
-            position: sticky; top: 0; z-index: 1000;
-        }
-        .logo-box { display: flex; align-items: center; font-weight: 900; font-size: 26px; text-decoration: none; }
-        .logo-hl { color: var(--hl-red); }
-        .logo-88 { color: var(--hl-blue); border-bottom: 3px solid var(--hl-blue); line-height: 0.8; }
-        
-        .auth-btns { display: flex; gap: 5px; }
-        .btn { padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; text-decoration: none; color: #fff; transition: 0.2s; }
-        .btn:active { transform: scale(0.9); }
-        .btn-reg { background: var(--hl-red); }
-        .btn-login { background: var(--hl-blue); }
+/* ── HERO BANNER ── */
+.hero {
+  position: relative;
+  z-index: 1;
+  margin: 12px 14px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a0a02 0%, #2d1200 40%, #1a0505 70%, #0d0a1a 100%);
+  border: 1px solid rgba(201,168,76,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,168,76,0.15);
+  padding: 20px 18px;
+}
+.hero-canvas { position:absolute; inset:0; pointer-events:none; }
+.hero-content { position: relative; z-index: 2; }
+.hero-badge {
+  display: inline-block;
+  background: var(--red);
+  color: #fff;
+  font-size: 9px;
+  letter-spacing: 3px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.hero h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.55rem;
+  font-weight: 900;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #fff 0%, var(--gold-light) 60%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 6px;
+}
+.hero p { font-size: 12px; color: var(--text-dim); margin-bottom: 14px; }
+.hero-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
+  color: #0a0a0a;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  box-shadow: 0 4px 18px rgba(201,168,76,0.4);
+  transition: all 0.2s;
+}
+.hero-btn:active { transform: scale(0.95); }
 
-        .marquee-container {
-            background: rgba(34, 34, 34, 0.9); color: #fff; height: 32px;
-            display: flex; align-items: center; overflow: hidden;
-            border-top: 1px solid #444;
-        }
-        .marquee-text {
-            white-space: nowrap; font-size: 12px;
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 90s linear infinite;
-            color: #ffeb3b;
-        }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+/* ── ACTION BAR ── */
+.action-bar {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 10px;
+  position: relative;
+  z-index: 1;
+}
+.action-item {
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.action-item:active { transform: scale(0.88); }
+.action-icon {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.05));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  margin: 0 auto 5px;
+  backdrop-filter: blur(6px);
+  transition: all 0.25s;
+}
+.action-item:active .action-icon { border-color: var(--gold); box-shadow: 0 0 14px rgba(201,168,76,0.3); }
+.action-label { font-size: 9.5px; color: var(--text-dim); font-weight: 600; letter-spacing: 0.5px; }
 
-        .action-bar {
-            background: rgba(255, 255, 255, 0.7); display: flex; justify-content: space-around;
-            padding: 12px 0; border-bottom: 1px solid #f0f0f0; margin-bottom: 10px;
-        }
-        .action-item { text-align: center; color: #555; font-size: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .action-item:active { transform: scale(0.9); }
-        .action-icon { 
-            width: 38px; height: 38px; background: #fff; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px; margin: 0 auto 5px; color: var(--hl-blue);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: 0.3s;
-        }
+/* ── SECTION TITLE ── */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 16px 10px;
+  position: relative;
+  z-index: 1;
+}
+.section-head h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--gold-light);
+  font-weight: 700;
+}
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
 
-        .banner-gift {
-            width: 92%; margin: 0 auto 15px;
-            background: #fff; border: 1px solid #eee; border-radius: 10px;
-            padding: 15px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .banner-gift b { color: var(--hl-red); font-size: 18px; display: block; }
+/* ── WINNERS BOARD ── */
+.winners-wrap {
+  margin: 0 14px 16px;
+  background: linear-gradient(135deg, rgba(13,17,23,0.9), rgba(17,24,32,0.9));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+.winners-header {
+  background: linear-gradient(90deg, rgba(192,57,43,0.2), rgba(201,168,76,0.1));
+  border-bottom: 1px solid var(--border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.winners-header span {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+}
+.winners-header i { color: var(--red-bright); font-size: 13px; }
+.winner-list { max-height: 160px; overflow: hidden; position: relative; }
+.winner-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.3s;
+  animation: slideInWinner 0.5s ease;
+}
+@keyframes slideInWinner {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.winner-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--red), #8e1a12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+  border: 1px solid rgba(201,168,76,0.3);
+}
+.winner-info { flex: 1; }
+.winner-name { font-size: 12px; font-weight: 700; color: var(--cream); }
+.winner-game { font-size: 10px; color: var(--text-dim); }
+.winner-amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  color: #2ecc71;
+  font-weight: 700;
+}
 
-        /* THANH LỌC GAME (CATEGORY) */
-        .category-nav {
-            display: flex;
-            overflow-x: auto;
-            gap: 10px;
-            padding: 5px 15px 15px;
-            scrollbar-width: none;
-        }
-        .category-nav::-webkit-scrollbar { display: none; }
+/* ── CATEGORY NAV ── */
+.cat-nav {
+  display: flex;
+  gap: 8px;
+  padding: 0 14px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: relative;
+  z-index: 1;
+}
+.cat-nav::-webkit-scrollbar { display: none; }
+.cat-item {
+  min-width: 72px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 9px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  flex-shrink: 0;
+}
+.cat-item i { font-size: 17px; display: block; margin-bottom: 4px; color: var(--text-dim); }
+.cat-item span { font-size: 9.5px; font-weight: 700; color: var(--text-dim); letter-spacing: 0.5px; text-transform: uppercase; }
+.cat-item.active {
+  background: var(--gold-dim);
+  border-color: rgba(201,168,76,0.5);
+  box-shadow: 0 0 14px rgba(201,168,76,0.15);
+}
+.cat-item.active i, .cat-item.active span { color: var(--gold-light); }
 
-        .cat-item {
-            min-width: 80px;
-            background: #fff;
-            padding: 10px 5px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid #eee;
-            transition: 0.3s;
-        }
-        .cat-item i { font-size: 20px; display: block; margin-bottom: 5px; color: #555; }
-        .cat-item span { font-size: 10px; font-weight: bold; color: #777; text-transform: uppercase; }
+/* ── GAME GRID ── */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 11px;
+  padding: 0 14px;
+  position: relative;
+  z-index: 1;
+}
+.game-card {
+  background: linear-gradient(145deg, #111820, #0d1117);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.07);
+  text-decoration: none;
+  display: block;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.game-card:active {
+  transform: scale(0.95);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(201,168,76,0.25);
+}
+.game-card.hidden { display: none; }
+.game-thumb {
+  height: 112px;
+  overflow: hidden;
+  position: relative;
+  background: #1a1a2e;
+}
+.game-thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.game-thumb::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40px;
+  background: linear-gradient(transparent, rgba(8,12,16,0.8));
+}
+.tag {
+  position: absolute;
+  top: 7px; left: 7px;
+  font-size: 8.5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  z-index: 5;
+  text-transform: uppercase;
+}
+.tag-hot { background: linear-gradient(135deg, #e67e22, #e74c3c); color: #fff; }
+.tag-new { background: linear-gradient(135deg, #27ae60, #1abc9c); color: #fff; }
+.game-info {
+  padding: 8px 10px 10px;
+}
+.game-info h3 { font-size: 12.5px; font-weight: 700; color: var(--cream); margin-bottom: 2px; }
+.game-info p { font-size: 10px; color: var(--text-dim); margin-bottom: 7px; }
+.play-btn {
+  display: block;
+  background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.08));
+  border: 1px solid rgba(201,168,76,0.3);
+  color: var(--gold-light);
+  padding: 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.game-card:active .play-btn {
+  background: var(--gold);
+  color: #0a0a0a;
+  border-color: var(--gold);
+}
 
-        .cat-item.active {
-            background: #e1f5fe;
-            border-color: var(--hl-blue);
-        }
-        .cat-item.active i, .cat-item.active span {
-            color: var(--hl-blue);
-        }
+/* ── FOOTER DISCLAIMER ── */
+.disclaimer {
+  padding: 24px 16px 16px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 10.5px;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+.disclaimer::before {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 1px;
+  background: var(--border);
+  margin: 0 auto 16px;
+}
+.partners { font-size: 10px; color: rgba(201,168,76,0.4); margin-bottom: 8px; letter-spacing: 1px; }
 
-        .game-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 12px; padding: 0 15px;
-        }
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 62px;
+  background: rgba(8,12,16,0.97);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 200;
+}
+.nav-item {
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-dim);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+  padding: 6px 10px;
+}
+.nav-item i { font-size: 18px; display: block; margin-bottom: 3px; }
+.nav-item.active { color: var(--gold-light); }
+.nav-item.active i { filter: drop-shadow(0 0 6px rgba(201,168,76,0.6)); }
 
-        .game-card {
-            background: #fff; border-radius: 12px; overflow: hidden;
-            border: 1px solid #dae5ed; text-decoration: none;
-            position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            display: block; 
-        }
-        .game-card.hidden { display: none; }
-
-        .game-card:hover, .game-card:active {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-            border-color: var(--hl-blue);
-        }
-        .game-thumb { height: 110px; background: #2c3e50; overflow: hidden; }
-        .game-info { padding: 8px; text-align: center; }
-        .game-info h3 { margin: 0; font-size: 13px; color: #333; }
-        .game-info p { margin: 2px 0; font-size: 10px; color: #999; }
-        
-        .play-btn {
-            display: block; background: var(--hl-blue); color: #fff;
-            padding: 6px; margin-top: 5px; border-radius: 4px;
-            font-size: 11px; font-weight: bold;
-            transition: 0.2s;
-        }
-
-        .tag-hot {
-            position: absolute; top: 6px; left: 6px;
-            background: #ff9800; color: #fff; font-size: 9px;
-            padding: 2px 6px; border-radius: 3px; font-weight: bold; z-index: 5;
-        }
-
-        .disclaimer-footer {
-            padding: 25px 15px 100px;
-            text-align: center;
-            color: #777; font-size: 11px; line-height: 1.6;
-        }
-        .partner-logos { margin-bottom: 15px; font-weight: bold; color: #555; font-size: 13px; }
-
-        .footer-nav {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: #fff; height: 60px; display: flex;
-            justify-content: space-around; align-items: center;
-            border-top: 1px solid #eee; z-index: 1000;
-        }
-        .nav-item { text-align: center; color: #bbb; text-decoration: none; font-size: 10px; }
-        .nav-item.active { color: var(--hl-blue); }
-        .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
-    </style>
+/* ── GOLD DIVIDER ── */
+.gold-divider {
+  width: calc(100% - 28px);
+  height: 1px;
+  margin: 4px 14px 14px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  position: relative;
+  z-index: 1;
+}
+</style>
 </head>
-<body oncontextmenu="return false;"> 
-    
-    <div id="loading-screen">
-        <img src="load.png" alt="Loading...">
-        <div class="loading-text">ĐANG KẾT NỐI...</div>
+<body oncontextmenu="return false;">
+
+<!-- PARTICLES -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- LOADING -->
+<div id="loading-screen">
+  <img src="load.png" alt="HL88">
+  <div class="load-bar-wrap"><div class="load-bar"></div></div>
+  <div class="load-txt">Đang kết nối...</div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <a href="#" class="logo"><span class="logo-hl">HL</span><span class="logo-88">88</span></a>
+  <div class="auth-btns">
+    <a href="#" class="btn btn-reg">Đăng Ký</a>
+    <a href="#" class="btn btn-login">Đăng Nhập</a>
+  </div>
+</div>
+
+<!-- CANVAS DECO ORNAMENT -->
+<canvas id="decoCanvas"></canvas>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner" id="marqueeText">Đang tải...</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-badge">🎁 Khuyến mãi tân thủ</div>
+    <h2>Tặng 58K<br>Trải Nghiệm</h2>
+    <p>Đăng ký ngay – nhận thưởng tức thì, chơi không giới hạn</p>
+    <a href="#" class="hero-btn">Nhận Ngay</a>
+  </div>
+</div>
+
+<!-- ACTION BAR -->
+<div class="action-bar">
+  <div class="action-item">
+    <div class="action-icon">💰</div>
+    <div class="action-label">Nạp Tiền</div>
+  </div>
+  <div class="action-item">
+    <div class="action-icon">🏧</div>
+    <div class="action-label">Rút Tiền</div>
+  </div>
+  <div class="action-item">
+    <div class="action-icon">👥</div>
+    <div class="action-label">Giới Thiệu</div>
+  </div>
+  <div class="action-item">
+    <div class="action-icon">🤝</div>
+    <div class="action-label">Đại Lý</div>
+  </div>
+</div>
+
+<div class="gold-divider"></div>
+
+<!-- WINNERS BOARD -->
+<div class="section-head">
+  <h3>🏆 Người Thắng Lớn</h3>
+  <div class="section-line"></div>
+</div>
+<div class="winners-wrap">
+  <div class="winners-header">
+    <i class="fas fa-fire"></i>
+    <span>Live Winners</span>
+  </div>
+  <div class="winner-list" id="winnerList"></div>
+</div>
+
+<!-- CATEGORY NAV -->
+<div class="section-head" style="margin-top:6px">
+  <h3>🎮 Trò Chơi</h3>
+  <div class="section-line"></div>
+</div>
+<div class="cat-nav">
+  <div class="cat-item active" onclick="filterGames('all',this)">
+    <i class="fas fa-th-large"></i><span>Tất Cả</span>
+  </div>
+  <div class="cat-item" onclick="filterGames('slot',this)">
+    <i>🎰</i><span>Nổ Hũ</span>
+  </div>
+  <div class="cat-item" onclick="filterGames('casino',this)">
+    <i>🃏</i><span>Casino</span>
+  </div>
+</div>
+
+<!-- GAME GRID -->
+<div class="game-grid" id="main-grid">
+  <a href="aviamaster.html" class="game-card" data-type="casino">
+    <div class="tag tag-new">New</div>
+    <div class="game-thumb"><img src="avia.png" alt="Avia Masters" loading="lazy"></div>
+    <div class="game-info"><h3>Avia Masters</h3><p>BGaming</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="aviator.html" class="game-card" data-type="casino">
+    <div class="tag tag-hot">Hot</div>
+    <div class="game-thumb"><img src="aviator.png" alt="Aviator" loading="lazy"></div>
+    <div class="game-info"><h3>Aviator</h3><p>Spribe</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="mines.html" class="game-card" data-type="casino">
+    <div class="tag tag-new">New</div>
+    <div class="game-thumb"><img src="mines.png" alt="Mines" loading="lazy"></div>
+    <div class="game-info"><h3>Mines</h3><p>InOut</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="ki_lan.html" class="game-card" data-type="slot">
+    <div class="tag tag-hot">Hot</div>
+    <div class="game-thumb"><img src="images.jpeg" alt="Kì Lân" loading="lazy"></div>
+    <div class="game-info"><h3>Kì Lân</h3><p>PG Soft</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="li_xi.html" class="game-card" data-type="slot">
+    <div class="tag tag-hot">Hot</div>
+    <div class="game-thumb"><img src="lixj.png" alt="Lì Xì" loading="lazy"></div>
+    <div class="game-info"><h3>Lì Xì</h3><p>Tiền Tài</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="quyet_chien.html" class="game-card" data-type="slot">
+    <div class="game-thumb"><img src="quyetchien.png" alt="Quyết Chiến" loading="lazy"></div>
+    <div class="game-info"><h3>Quyết Chiến</h3><p>Tiền Thưởng</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="mat_chuoc.html" class="game-card" data-type="slot">
+    <div class="game-thumb"><img src="matchuoc.png" alt="Mạt Chược" loading="lazy"></div>
+    <div class="game-info"><h3>Mạt Chược</h3><p>PG Soft</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="lucky_neko.html" class="game-card" data-type="slot">
+    <div class="tag tag-new">New</div>
+    <div class="game-thumb"><img src="neko.png" alt="Lucky Neko" loading="lazy"></div>
+    <div class="game-info"><h3>Lucky Neko</h3><p>PG Soft</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="mahjong_ways_2.html" class="game-card" data-type="slot">
+    <div class="tag tag-new">New</div>
+    <div class="game-thumb"><img src="mh2.png" alt="Mạt Chược 2" loading="lazy"></div>
+    <div class="game-info"><h3>Mạt Chược 2</h3><p>PG Soft</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="v8.html" class="game-card" data-type="casino">
+    <div class="game-thumb"><img src="v8.png" alt="Club V8" loading="lazy"></div>
+    <div class="game-info"><h3>Club V8</h3><p>Casino</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="football.html" class="game-card" data-type="casino">
+    <div class="tag tag-new">New</div>
+    <div class="game-thumb"><img src="ball.png" alt="Football X" loading="lazy"></div>
+    <div class="game-info"><h3>Football X</h3><p>SmartSoft</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="chickenroad.html" class="game-card" data-type="casino">
+    <div class="tag tag-hot">Hot</div>
+    <div class="game-thumb"><img src="chickenroad.png" alt="Chicken Road" loading="lazy"></div>
+    <div class="game-info"><h3>Chicken Road</h3><p>InOut</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+  <a href="aviafly2.html" class="game-card" data-type="casino">
+    <div class="tag tag-hot">Hot</div>
+    <div class="game-thumb"><img src="aviafly2.png" alt="Avia Fly 2" loading="lazy"></div>
+    <div class="game-info"><h3>Avia Fly 2</h3><p>InOut</p><div class="play-btn">Chơi Ngay</div></div>
+  </a>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  <div class="partners">© BGaming · © PG Soft · © Spribe · © SmartSoft · © InOut</div>
+  <p><b>Tuyên bố miễn trừ:</b> HL88 được phát triển bởi <b>©halong</b> chỉ nhằm mục đích thực hành lập trình và giải trí nội bộ. Tất cả trò chơi là bản demo — tiền trong game là tiền ảo, không có giá trị thật.</p>
+  <p style="margin-top:8px;font-size:10px;color:rgba(201,168,76,0.3)">© 2026 HL88. All Rights Reserved.</p>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <a href="#" class="nav-item active"><i class="fas fa-home"></i>Trang chủ</a>
+  <a href="#" class="nav-item"><i class="fas fa-gift"></i>Khuyến mãi</a>
+  <a href="#" class="nav-item"><i class="fas fa-headset"></i>CSKH</a>
+  <a href="#" class="nav-item"><i class="fas fa-user"></i>Tôi</a>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  PARTICLE SYSTEM
+// ══════════════════════════════════════════
+const pc = document.getElementById('particleCanvas');
+const pctx = pc.getContext('2d');
+let particles = [];
+
+function resizeParticle() {
+  pc.width = window.innerWidth;
+  pc.height = window.innerHeight;
+}
+resizeParticle();
+window.addEventListener('resize', resizeParticle);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * pc.width;
+    this.y = Math.random() * pc.height;
+    this.size = Math.random() * 1.8 + 0.3;
+    this.speedY = -(Math.random() * 0.5 + 0.15);
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.opacity = Math.random() * 0.6 + 0.1;
+    this.gold = Math.random() > 0.5;
+    this.life = 0;
+    this.maxLife = Math.random() * 200 + 100;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.life++;
+    if (this.life > this.maxLife || this.y < -10) this.reset();
+  }
+  draw() {
+    const fade = this.life < 30 ? this.life / 30 : this.life > this.maxLife - 30 ? (this.maxLife - this.life) / 30 : 1;
+    pctx.globalAlpha = this.opacity * fade;
+    pctx.fillStyle = this.gold ? '#c9a84c' : '#ffffff';
+    pctx.beginPath();
+    pctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    pctx.fill();
+  }
+}
+
+for (let i = 0; i < 120; i++) {
+  const p = new Particle();
+  p.life = Math.random() * p.maxLife;
+  particles.push(p);
+}
+
+function animateParticles() {
+  pctx.clearRect(0, 0, pc.width, pc.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  pctx.globalAlpha = 1;
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ══════════════════════════════════════════
+//  DECO CANVAS (ornament line)
+// ══════════════════════════════════════════
+const dc = document.getElementById('decoCanvas');
+const dctx = dc.getContext('2d');
+dc.width = window.innerWidth;
+dc.height = 60;
+
+function drawDeco() {
+  dctx.clearRect(0, 0, dc.width, dc.height);
+  const cx = dc.width / 2;
+  // Center diamond
+  dctx.save();
+  dctx.translate(cx, 30);
+  dctx.rotate(Math.PI / 4);
+  dctx.strokeStyle = 'rgba(201,168,76,0.5)';
+  dctx.lineWidth = 1;
+  dctx.strokeRect(-6, -6, 12, 12);
+  dctx.fillStyle = 'rgba(201,168,76,0.3)';
+  dctx.fillRect(-4, -4, 8, 8);
+  dctx.restore();
+  // Lines
+  const grad = dctx.createLinearGradient(0, 30, dc.width, 30);
+  grad.addColorStop(0, 'transparent');
+  grad.addColorStop(0.35, 'rgba(201,168,76,0.4)');
+  grad.addColorStop(0.5, 'rgba(201,168,76,0.1)');
+  grad.addColorStop(0.65, 'rgba(201,168,76,0.4)');
+  grad.addColorStop(1, 'transparent');
+  dctx.strokeStyle = grad;
+  dctx.lineWidth = 0.8;
+  dctx.beginPath();
+  dctx.moveTo(0, 30); dctx.lineTo(dc.width, 30);
+  dctx.stroke();
+  // Small diamonds along line
+  for (let i = 1; i <= 4; i++) {
+    const x = cx - 60 * i;
+    const x2 = cx + 60 * i;
+    [x, x2].forEach(px => {
+      dctx.save();
+      dctx.translate(px, 30);
+      dctx.rotate(Math.PI / 4);
+      dctx.strokeStyle = 'rgba(201,168,76,0.25)';
+      dctx.lineWidth = 0.7;
+      dctx.strokeRect(-3, -3, 6, 6);
+      dctx.restore();
+    });
+  }
+}
+drawDeco();
+
+// ══════════════════════════════════════════
+//  HERO CANVAS (animated bg)
+// ══════════════════════════════════════════
+const hc = document.getElementById('heroCanvas');
+const hctx = hc.getContext('2d');
+function resizeHero() {
+  const hero = hc.parentElement;
+  hc.width = hero.offsetWidth;
+  hc.height = hero.offsetHeight;
+}
+resizeHero();
+let heroT = 0;
+function animateHero() {
+  hctx.clearRect(0, 0, hc.width, hc.height);
+  heroT += 0.012;
+  // Slow rotating glow orbs
+  const orbs = [
+    { x: hc.width * 0.85, y: hc.height * 0.2, r: 80, c: 'rgba(201,168,76,' },
+    { x: hc.width * 0.1, y: hc.height * 0.8, r: 60, c: 'rgba(192,57,43,' },
+  ];
+  orbs.forEach((o, i) => {
+    const ox = o.x + Math.sin(heroT + i) * 15;
+    const oy = o.y + Math.cos(heroT + i * 0.7) * 10;
+    const g = hctx.createRadialGradient(ox, oy, 0, ox, oy, o.r);
+    g.addColorStop(0, o.c + '0.18)');
+    g.addColorStop(1, o.c + '0)');
+    hctx.fillStyle = g;
+    hctx.beginPath();
+    hctx.arc(ox, oy, o.r, 0, Math.PI * 2);
+    hctx.fill();
+  });
+  requestAnimationFrame(animateHero);
+}
+animateHero();
+
+// ══════════════════════════════════════════
+//  WINNERS BOARD
+// ══════════════════════════════════════════
+const names = ['An****h','Bi****g','Cu****g','Du****y','Em****a','Gi****g','Ho****a','Ki****t','Lo****g','Mi****h','Na****m','Oa****h','Ph****c','Qu****n','Th****h','Vi****t'];
+const games = ['Aviator','Mines','Kì Lân','Lì Xì','Mạt Chược','Lucky Neko','Club V8','Football X','Chicken Road','Avia Masters','Avia Fly 2'];
+const emojis = ['🐉','🦁','🐯','🦅','🔥','⭐','💎','🎯','👑','🃏'];
+
+function randomWinner() {
+  const win = (Math.random() * 48 + 2).toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return {
+    name: names[Math.floor(Math.random() * names.length)],
+    game: games[Math.floor(Math.random() * games.length)],
+    amount: win + ',000 ₫',
+    emoji: emojis[Math.floor(Math.random() * emojis.length)],
+  };
+}
+
+const wList = document.getElementById('winnerList');
+let winnerData = [];
+for (let i = 0; i < 6; i++) winnerData.push(randomWinner());
+
+function renderWinners() {
+  wList.innerHTML = winnerData.map(w => `
+    <div class="winner-item">
+      <div class="winner-avatar">${w.emoji}</div>
+      <div class="winner-info">
+        <div class="winner-name">${w.name}</div>
+        <div class="winner-game">${w.game}</div>
+      </div>
+      <div class="winner-amount">+${w.amount}</div>
     </div>
+  `).join('');
+}
+renderWinners();
 
-    <div class="header">
-        <a href="#" class="logo-box"><span class="logo-hl">HL</span><span class="logo-88">88</span></a>
-        <div class="auth-btns">
-            <a href="#" class="btn btn-reg">ĐĂNG KÝ</a>
-            <a href="#" class="btn btn-login">ĐĂNG NHẬP</a>
-        </div>
-    </div>
+// Cycle new winner every 3s
+setInterval(() => {
+  winnerData.unshift(randomWinner());
+  winnerData = winnerData.slice(0, 6);
+  renderWinners();
+}, 3000);
 
-    <div class="marquee-container">
-        <div class="marquee-text" id="winner-list">Đang kiểm tra danh sách...</div>
-    </div>
+// ══════════════════════════════════════════
+//  MARQUEE
+// ══════════════════════════════════════════
+function buildMarquee() {
+  const n2 = ['an','binh','cuong','duy','em','giang','hoa','kiet','long','minh'];
+  let txt = '🔥 HL88 – CỔNG GAME QUỐC TẾ UY TÍN SỐ 1! &nbsp;|&nbsp; ';
+  for (let i = 0; i < 35; i++) {
+    const u = n2[Math.floor(Math.random() * n2.length)].charAt(0) + '****' + String.fromCharCode(97 + Math.floor(Math.random() * 26));
+    const w = (Math.random() * 45 + 5).toFixed(3) + ',000';
+    const g = games[Math.floor(Math.random() * games.length)];
+    txt += `🎉 ${u} vừa thắng ${w} VNĐ tại ${g} &nbsp;|&nbsp; `;
+  }
+  document.getElementById('marqueeText').innerHTML = txt;
+}
+buildMarquee();
 
-    <div class="action-bar">
-        <div class="action-item"><div class="action-icon">💰</div>Nạp Tiền</div>
-        <div class="action-item"><div class="action-icon">🏧</div>Rút Tiền</div>
-        <div class="action-item"><div class="action-icon">👥</div>Giới Thiệu</div>
-        <div class="action-item"><div class="action-icon">🤝</div>Đại Lý</div>
-    </div>
+// ══════════════════════════════════════════
+//  FILTER GAMES
+// ══════════════════════════════════════════
+function filterGames(type, el) {
+  document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.game-card').forEach(card => {
+    card.classList.toggle('hidden', type !== 'all' && card.dataset.type !== type);
+  });
+}
 
-    <div class="banner-gift">
-        <div><small style="color:#888">Khuyến mãi tân thủ</small><b>TẶNG 58K TRẢI NGHIỆM</b></div>
-        <div style="font-size: 35px;">🎁</div>
-    </div>
+// ══════════════════════════════════════════
+//  LOADING SCREEN
+// ══════════════════════════════════════════
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const loader = document.getElementById('loading-screen');
+    loader.style.opacity = '0';
+    setTimeout(() => { loader.style.display = 'none'; }, 900);
+  }, 3400);
+});
 
-    <div class="category-nav">
-        <div class="cat-item active" onclick="filterGames('all', this)">
-            <i class="fas fa-th-large"></i>
-            <span>Tất cả</span>
-        </div>
-        <div class="cat-item" onclick="filterGames('slot', this)">
-            <i class="fas fa-revolving-dot">🎰</i>
-            <span>Nổ hũ</span>
-        </div>
-        <div class="cat-item" onclick="filterGames('casino', this)">
-            <i class="fas fa-spade">🃏</i>
-            <span>Casino</span>
-        </div>
-    </div>
-
-    <div class="game-grid" id="main-grid">
-        <a href="aviamaster.html" class="game-card" data-type="casino">
-            <div class="tag-hot" style="background:#e62117">NEW</div>
-            <div class="game-thumb"><img src="avia.png" alt="Avia Masters"></div>
-            <div class="game-info"><h3>Avia Masters</h3><p>BGaming</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-        <a href="aviator.html" class="game-card" data-type="casino">
-            <div class="tag-hot">HOT</div>
-            <div class="game-thumb"><img src="aviator.png" alt="Aviator"></div>
-            <div class="game-info"><h3>Aviator</h3><p>Spribe</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-
-        <a href="mines.html" class="game-card" data-type="casino">
-            <div class="tag-hot" style="background:#e62117">NEW</div>
-            <div class="game-thumb"><img src="mines.png" alt="Mines"></div>
-            <div class="game-info"><h3>Mines</h3><p>InOut</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-
-        <a href="ki_lan.html" class="game-card" data-type="slot">
-            <div class="tag-hot">HOT</div>
-            <div class="game-thumb"><img src="images.jpeg" alt="Kì Lân"></div>
-            <div class="game-info"><h3>Kì Lân</h3><p>PG Soft</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-        <a href="li_xi.html" class="game-card" data-type="slot">
-            <div class="tag-hot">HOT</div>
-            <div class="game-thumb"><img src="lixj.png" alt="Lì Xì"></div>
-            <div class="game-info"><h3>Lì Xì</h3><p>Tiền Tài</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-        <a href="quyet_chien.html" class="game-card" data-type="slot">
-            <div class="game-thumb"><img src="quyetchien.png" alt="Quyết Chiến"></div>
-            <div class="game-info"><h3>Quyết Chiến</h3><p>Tiền Thưởng</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-        <a href="mat_chuoc.html" class="game-card" data-type="slot">
-            <div class="game-thumb"><img src="matchuoc.png" alt="Mạt Chược"></div>
-            <div class="game-info"><h3>Mạt Chược</h3><p>PG Soft</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-        <a href="lucky_neko.html" class="game-card" data-type="slot">
-            <div class="tag-hot" style="background:#4caf50">NEW</div>
-            <div class="game-thumb"><img src="neko.png" alt="Lucky Neko"></div>
-            <div class="game-info"><h3>Lucky Neko</h3><p>PG Soft</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-        <a href="mahjong_ways_2.html" class="game-card" data-type="slot">
-            <div class="tag-hot" style="background:#2196f3">NEW</div>
-            <div class="game-thumb"><img src="mh2.png" alt="Mahjong Ways 2"></div>
-            <div class="game-info"><h3>Mạt Chược 2</h3><p>PG Soft</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-
-        <a href="v8.html" class="game-card" data-type="casino">
-            <div class="game-thumb"><img src="v8.png" alt="Club V8"></div>
-            <div class="game-info"><h3>Club V8</h3><p>Casino</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-        <a href="football.html" class="game-card" data-type="casino">
-            <div class="tag-hot" style="background:#e62117">NEW</div>
-            <div class="game-thumb"><img src="ball.png" alt="Football X"></div>
-            <div class="game-info"><h3>Football X</h3><p>SmartSoft</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-        <a href="chickenroad.html" class="game-card" data-type="casino">
-            <div class="tag-hot" style="background:#ff9800">NEW</div>
-            <div class="game-thumb"><img src="chickenroad.png" alt="Chicken Road"></div>
-            <div class="game-info"><h3>Chicken Road</h3><p>InOut</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-        <a href="aviafly2.html" class="game-card" data-type="casino">
-            <div class="tag-hot" style="background:#ff9800">HOT</div>
-            <div class="game-thumb"><img src="aviafly2.png" alt="Avia Fly 2"></div>
-            <div class="game-info"><h3>Avia Fly 2</h3><p>InOut</p><div class="play-btn">CHƠI NGAY</div></div>
-        </a>
-    </div>
-
-    <div class="disclaimer-footer">
-        <div class="partner-logos">© BGaming | © PG Soft | © Spribe | © SmartSoft | © InOut</div>
-        <p><b>TUYÊN BỐ MIỄN TRỪ TRÁCH NHIỆM:</b><br>
-        Dự án <b>HL88</b> được phát triển bởi <b>©halong</b> chỉ nhằm mục đích thực hành lập trình và giải trí nội bộ. Tất cả trò chơi trên trang web đều là bản trải nghiệm (Demo). Tiền trong game là tiền ảo (DMO), không có giá trị thật và không thể quy đổi dưới bất kỳ hình thức nào.</p>
-        <p>© 2026 HL88. All Rights Reserved.</p>
-    </div>
-
-    <div class="footer-nav">
-        <a href="#" class="nav-item active"><i class="fas fa-home"></i>Trang chủ</a>
-        <a href="#" class="nav-item"><i class="fas fa-gift"></i>Khuyến mãi</a>
-        <a href="#" class="nav-item"><i class="fas fa-headset"></i>CSKH</a>
-        <a href="#" class="nav-item"><i class="fas fa-user"></i>Tôi</a>
-    </div>
-
-    <script>
-        function filterGames(type, element) {
-            const items = document.querySelectorAll('.cat-item');
-            items.forEach(item => item.classList.remove('active'));
-            element.classList.add('active');
-
-            const cards = document.querySelectorAll('.game-card');
-            cards.forEach(card => {
-                if (type === 'all') {
-                    card.classList.remove('hidden');
-                } else {
-                    if (card.getAttribute('data-type') === type) {
-                        card.classList.remove('hidden');
-                    } else {
-                        card.classList.add('hidden');
-                    }
-                }
-            });
-        }
-
-        window.onload = function() {
-            setTimeout(() => {
-                const loader = document.getElementById('loading-screen');
-                loader.style.opacity = '0';
-                setTimeout(() => { loader.style.visibility = 'hidden'; }, 800);
-            }, 3500); 
-
-            const n = ["an","binh","cuong","duy","em","giang","hoa","kiet","long","minh","nam","oanh","phuc","quan"];
-            const g = ["Avia Masters","Aviator","Mines","Kì Lân","Lì Xì","Mạt Chược","Football X","Club V8","Chicken Road","Avia Fly 2"];
-            let txt = "🔥 HL88 - CỔNG GAME QUỐC TẾ UY TÍN SỐ 1! | ";
-            for(let i=0; i<40; i++) {
-                let user = n[Math.floor(Math.random()*n.length)].charAt(0) + "****" + String.fromCharCode(97 + Math.floor(Math.random()*26));
-                let win = (Math.random()*45 + 5).toFixed(3) + ",000";
-                txt += `🎉 Chúc mừng ${user} vừa thắng ${win} VND tại ${g[Math.floor(Math.random()*g.length)]}! | `;
-            }
-            document.getElementById('winner-list').innerText = txt;
-        }
-
-        document.onkeydown = function(e) {
-            if (e.keyCode == 123 || (e.ctrlKey && (e.keyCode == 85 || e.keyCode == 73))) {
-                return false;
-            }
-        };
-    </script>
- 
-    <script defer src="/_vercel/insights/script.js"></script>
-
+// Block devtools
+document.onkeydown = e => {
+  if (e.keyCode === 123 || (e.ctrlKey && [85, 73, 83].includes(e.keyCode))) return false;
+};
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
-
